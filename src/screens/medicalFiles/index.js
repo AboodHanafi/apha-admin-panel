@@ -4,7 +4,7 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import BasicTable from "../../components/table";
 import { getAdminDataThunk } from "../../redux/features/adminData/adminActions";
-import { Delete, Visibility } from "@mui/icons-material";
+import { Visibility } from "@mui/icons-material";
 import CustomizedDialogs from "../../components/popUp";
 
 const MedicalFiles = () => {

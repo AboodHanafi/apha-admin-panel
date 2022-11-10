@@ -20,12 +20,12 @@ import {
   getAdminDataThunk,
 } from "../../redux/features/adminData/adminActions";
 import { useParams } from "react-router-dom";
+import axios from "axios";
 const schema = yup.object({
   description: yup.string().required(),
   title: yup.string().required(),
   price: yup.string().required(),
   clinic: yup.string().required(),
-  //   expier: yup.date().required(),
   logo: yup.mixed().test((value) => {
     return value && value.length;
   }),
@@ -49,27 +49,21 @@ const OfferForm = () => {
   const [Image, setImage] = useState("");
   const dispatch = useDispatch();
 
-  //   const convertTo64 = (file) => {
-  //     const reader = new FileReader();
-  //     reader.onloadend = () => {
-  //       setImage(reader.result.toString());
-  //     };
-  //     reader.readAsDataURL(file);
-  //   };
   const onSubmit = async (data) => {
-    console.log(data);
+    const filteredData = covertToFormData(data);
     const res = await dispatch(
       createOfferThunk({
         url: `https://jihadm33.sg-host.com/public/api/dashboard/offer${
           params.id ? `/${params.id}` : ""
         }`,
-        expier: valueTo,
-        clinic: data.clinic,
-        price: data.price,
-        title: data.title,
-        description: data.title,
-        image: data.logo[0].name,
-        params: params.id ? "put" : "",
+        filteredData,
+        // expier: valueTo,
+        // clinic: data.clinic,
+        // price: data.price,
+        // title: data.title,
+        // description: data.title,
+        // image: data.logo[0],
+        // params: params.id ? "put" : "",
       })
     );
     if (createOfferThunk.fulfilled.match(res)) {
@@ -78,6 +72,33 @@ const OfferForm = () => {
       }
     }
   };
+  function covertToFormData(data) {
+    const formData = new FormData();
+    formData.append("clinic", data.clinic);
+    formData.append("description", data.description);
+    formData.append("image", data.logo[0]);
+    formData.append("price", data.price);
+    formData.append("title", data.title);
+    formData.append("expier", valueTo);
+    // Object.keys(data).forEach((item) => {
+    //   if (data[item]) formData.append(item, data[item]);
+    // });
+    return formData;
+  }
+  // const token = localStorage.getItem("userToken");
+  // const fetchData = async (data) => {
+  //   const filteredData = covertToFormData(data);
+  //   const response = await axios.post(
+  //     "https://jihadm33.sg-host.com/public/api/dashboard/offer",
+  //     filteredData,
+  //     {
+  //       headers: {
+  //         Authorization: `Bearer ${token}`,
+  //         // "X-HTTP-Method-Override": params,
+  //       },
+  //     }
+  //   );
+  // };
   const getUserData = async () => {
     if (params.id) {
       const response = await dispatch(
@@ -87,14 +108,11 @@ const OfferForm = () => {
       );
       const data = response.payload.items;
       if (getAdminDataThunk.fulfilled.match(response)) {
-        //
         setValue("description", data[0].description);
         setValue("clinic", data[0].clinic);
         setValue("title", data[0].title);
         setValue("price", data[0].price);
-        // setValue("expier", data[0].expier);
         setValueTo(data[0].expier);
-        // setValue("image", data[0].image);
         setImage(data[0].image);
       }
     }
@@ -149,7 +167,6 @@ const OfferForm = () => {
           <DatePicker
             disablePast
             openTo="year"
-            // views={["year", "day", "month"]}
             value={valueTo}
             onChange={(newValueTo) => {
               setChangeValueTo(newValueTo);
