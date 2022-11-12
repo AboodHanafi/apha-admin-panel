@@ -1,5 +1,6 @@
 import { Toaster } from "react-hot-toast";
 import { Route, Routes } from "react-router-dom";
+import WithAuth from "./components/auth";
 import LayOut from "./components/layout";
 import AdminPages from "./screens/adminPages";
 import PagesForm from "./screens/adminPages/form";
@@ -19,21 +20,119 @@ function App() {
     <LayOut>
       <Toaster />
       <Routes>
-        <Route path="/" element={<HomePage />} />
         <Route path="/signin" element={<SignIn />} />
-        <Route path="/orders" element={<Orders />} />
-        <Route path="/offers" element={<Offers />} />
-        <Route path="/consultations" element={<Consultation />} />
-        <Route path="/medical-files" element={<MedicalFiles />} />
-        <Route path="/appointments" element={<Appointments />} />
-        <Route path="/contactinfo" element={<ContactInfo />} />
-        <Route path="/pages" element={<AdminPages />} />
-        <Route path="/create-offer" element={<OfferForm />} />
-        <Route path="/offer/:id" element={<OfferForm />} />
-        <Route path="/create-page" element={<PagesForm />} />
-        <Route path="/page/:id" element={<PagesForm />} />
-        <Route path="/create-contact" element={<ContactForm />} />
-        <Route path="/contact/:id" element={<ContactForm />} />
+        <Route
+          path="/"
+          element={
+            <WithAuth>
+              <HomePage />
+            </WithAuth>
+          }
+        />
+        <Route
+          path="/orders"
+          element={
+            <WithAuth>
+              <Orders />
+            </WithAuth>
+          }
+        />
+        <Route
+          path="/offers"
+          element={
+            <WithAuth>
+              <Offers />
+            </WithAuth>
+          }
+        />
+        <Route
+          path="/consultations"
+          element={
+            <WithAuth>
+              <Consultation />
+            </WithAuth>
+          }
+        />
+        <Route
+          path="/medical-files"
+          element={
+            <WithAuth>
+              <MedicalFiles />
+            </WithAuth>
+          }
+        />
+        <Route
+          path="/appointments"
+          element={
+            <WithAuth>
+              <Appointments />
+            </WithAuth>
+          }
+        />
+        <Route
+          path="/contactinfo"
+          element={
+            <WithAuth>
+              <ContactInfo />
+            </WithAuth>
+          }
+        />
+        <Route
+          path="/pages"
+          element={
+            <WithAuth>
+              <AdminPages />
+            </WithAuth>
+          }
+        />
+        <Route
+          path="/create-offer"
+          element={
+            <WithAuth>
+              <OfferForm />
+            </WithAuth>
+          }
+        />
+        <Route
+          path="/offer/:id"
+          element={
+            <WithAuth>
+              <OfferForm />
+            </WithAuth>
+          }
+        />
+        <Route
+          path="/create-page"
+          element={
+            <WithAuth>
+              <PagesForm />
+            </WithAuth>
+          }
+        />
+        <Route
+          path="/page/:id"
+          element={
+            <WithAuth>
+              <PagesForm />
+            </WithAuth>
+          }
+        />
+        <Route
+          path="/create-contact"
+          element={
+            <WithAuth>
+              <ContactForm />
+            </WithAuth>
+          }
+        />
+        <Route
+          path="/contact/:id"
+          element={
+            <WithAuth>
+              <ContactForm />
+            </WithAuth>
+          }
+        />
       </Routes>
     </LayOut>
   );

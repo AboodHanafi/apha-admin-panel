@@ -40,7 +40,6 @@ export const createOfferThunk = createAsyncThunk(
     try {
       const { data } = await axios.post(
         url,
-
         filteredData,
 
         {

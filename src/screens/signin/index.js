@@ -67,7 +67,7 @@ const SignIn = () => {
 
   useEffect(() => {
     if (isAuthed) {
-      setTimeout(() => navigate("/orders"), 3000);
+      setTimeout(() => navigate("/"), 3000);
     }
   }, [isAuthed]);
 
