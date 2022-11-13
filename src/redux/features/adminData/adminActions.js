@@ -9,7 +9,7 @@ export const getAdminDataThunk = createAsyncThunk(
     try {
       const { data } = await CRUDRequsests.get(url, {
         headers: {
-          Authorization: `Bearer ${token}`,
+          Authorization: `Bearer ${localStorage.getItem("userToken")}`,
         },
       });
       return data;
@@ -21,34 +21,16 @@ export const getAdminDataThunk = createAsyncThunk(
   }
 );
 
-function covertToFormData(data) {
-  const formData = new FormData();
-  formData.append("clinic", data.clinic);
-  formData.append("description", data.description);
-  formData.append("image", data.logo[0]);
-  formData.append("price", data.price);
-  formData.append("title", data.title);
-  formData.append("expier", new Date());
-  // Object.keys(data).forEach((item) => {
-  //   if (data[item]) formData.append(item, data[item]);
-  // });
-  return formData;
-}
 export const createOfferThunk = createAsyncThunk(
   "create/offer",
   async ({ url, params, filteredData }, thunkApi) => {
     try {
-      const { data } = await axios.post(
-        url,
-        filteredData,
-
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            // "X-HTTP-Method-Override": params,
-          },
-        }
-      );
+      const { data } = await axios.post(url, filteredData, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "X-HTTP-Method-Override": params,
+        },
+      });
 
       return data;
     } catch (e) {

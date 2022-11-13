@@ -14,6 +14,7 @@ import Offers from "./screens/offers";
 import OfferForm from "./screens/offers/form";
 import Orders from "./screens/orders";
 import SignIn from "./screens/signin";
+import Test from "./screens/test/test";
 
 function App() {
   return (
@@ -21,6 +22,7 @@ function App() {
       <Toaster />
       <Routes>
         <Route path="/signin" element={<SignIn />} />
+        <Route path="/test" element={<Test />} />
         <Route
           path="/"
           element={

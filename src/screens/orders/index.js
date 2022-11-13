@@ -46,10 +46,11 @@ const Orders = () => {
           sx={{
             color: "#F4F4F4",
             borderRadius: "10px",
+            minWidth: "100px",
             background:
-              row.status === "Pending"
+              row.status === "schudale"
                 ? "#F59D18"
-                : row.status === "موافق عليه"
+                : row.status === "Completed"
                 ? "#0CA437"
                 : "#BF1C1C",
             textAlign: "center",
@@ -73,8 +74,8 @@ const Orders = () => {
       align: "center",
       headerAlign: "center",
       renderCell: ({ row }) => (
-        <IconButton key={row.id} onClick={() => console.log(row.id)}>
-          <EditIcon id={row.id} />
+        <IconButton key={row.id}>
+          <EditIcon />
         </IconButton>
       ),
     },

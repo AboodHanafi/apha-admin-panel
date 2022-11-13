@@ -57,13 +57,7 @@ const OfferForm = () => {
           params.id ? `/${params.id}` : ""
         }`,
         filteredData,
-        // expier: valueTo,
-        // clinic: data.clinic,
-        // price: data.price,
-        // title: data.title,
-        // description: data.title,
-        // image: data.logo[0],
-        // params: params.id ? "put" : "",
+        params: params.id ? "put" : "",
       })
     );
     if (createOfferThunk.fulfilled.match(res)) {
