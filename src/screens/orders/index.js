@@ -60,9 +60,9 @@ const Orders = () => {
               borderRadius: "10px",
               minWidth: "100px",
               background:
-                row.status.toLocaleLowerCase() === "pending"
+                row.status === "Pending"
                   ? "#F59D18"
-                  : row.status.toLocaleLowerCase() === "completed"
+                  : row.status === "Completed"
                   ? "#0CA437"
                   : "#BF1C1C",
               textAlign: "center",

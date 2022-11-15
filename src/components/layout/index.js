@@ -8,7 +8,7 @@ import { DrawerHeader } from "../sideBar/style";
 import { useSelector } from "react-redux";
 
 export default function LayOut({ children }) {
-  const [open, setOpen] = React.useState(true);
+  const [open, setOpen] = React.useState(false);
   const isAuthed = useSelector((state) => state.auth.isAuthed);
 
   const handleDrawerOpen = () => {
