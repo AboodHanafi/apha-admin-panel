@@ -11,6 +11,7 @@ const initialState = {
   adminData: {
     first: {},
   },
+  loading: false,
 };
 
 export const adminSlice = createSlice({
@@ -23,10 +24,16 @@ export const adminSlice = createSlice({
       state.adminData = action.payload?.items;
     });
     builder.addCase(getAdminDataThunk.rejected, (state, action) => {});
+    builder.addCase(createOfferThunk.pending, (state) => {
+      state.loading = true;
+    });
     builder.addCase(createOfferThunk.fulfilled, (state, action) => {
       toast.success("offer added");
+      state.loading = false;
     });
-    builder.addCase(createOfferThunk.rejected, (state, action) => {});
+    builder.addCase(createOfferThunk.rejected, (state, action) => {
+      state.loading = false;
+    });
     builder.addCase(createPageThunk.fulfilled, (state, action) => {
       toast.success("page added");
     });

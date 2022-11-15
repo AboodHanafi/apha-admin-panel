@@ -7,14 +7,14 @@ import { useEffect } from "react";
 export default function BasicTable({ rows, columns }) {
   const StyledTable = styled(DataGrid)(({ theme }) => ({
     border: "none",
-    minHeight: "80vh",
+    minHeight: "75vh",
     color: "#0A0A0A",
     fontWeight: 500,
     fontSize: "0.9rem",
     "& .paxton-table--row": {
       border: "none",
-      marginTop: "25px",
-      marginBottom: "25px",
+      marginTop: "15px",
+      marginBottom: "15px",
       backgroundColor: "#fff",
     },
     "& .paxton-table--cell": {
@@ -41,13 +41,9 @@ export default function BasicTable({ rows, columns }) {
         rows={getRows(rows)}
         component={Pagination}
         columns={columns}
-        pageSize={5}
-        rowsPerPageOptions={[5]}
+        pageSize={6}
+        rowsPerPageOptions={[6]}
         disableSelectionOnClick
-        // components={{
-        //   LoadingOverlay: LinearProgress,
-        // }}
-        // loading={filteredRows === [] ? true : false}
         getRowClassName={() => "paxton-table--row"}
       />
     </Stack>

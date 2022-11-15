@@ -9,18 +9,15 @@ const WithAuth = ({ children }) => {
   const navigate = useNavigate();
   useEffect(() => {
     if (!isAuthed) {
-      setTimeout(() => {
-        navigate("/signin");
-      }, 3000);
+      navigate("/signin");
     }
-  }, []);
+  }, [isAuthed]);
   if (isAuthed) {
     return <>{children}</>;
   }
   return (
     <Stack width={"100%"} alignItems={"center"} marginTop={"100px"}>
       <h1>You Must login before </h1>
-      <h3> redirect in 3 seconds ...</h3>
       <CircularProgress />
     </Stack>
   );

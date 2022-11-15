@@ -6,7 +6,9 @@ import {
   Input,
   Stack,
   Typography,
+  CircularProgress,
 } from "@mui/material";
+
 import { useForm } from "react-hook-form";
 import * as yup from "yup";
 import { CustomizedTextField } from "../../GlobalStyle";
@@ -14,7 +16,7 @@ import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { useEffect, useState } from "react";
 import { format } from "date-fns-tz";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import {
   createOfferThunk,
   getAdminDataThunk,
@@ -48,6 +50,7 @@ const OfferForm = () => {
   });
   const [Image, setImage] = useState("");
   const dispatch = useDispatch();
+  const loading = useSelector((state) => state.adminData.loading);
 
   const onSubmit = async (data) => {
     const filteredData = covertToFormData(data);
@@ -114,7 +117,9 @@ const OfferForm = () => {
   useEffect(() => {
     getUserData();
   }, [params]);
-
+  if (loading) {
+    return <CircularProgress />;
+  }
   return (
     <Stack
       spacing={3}
