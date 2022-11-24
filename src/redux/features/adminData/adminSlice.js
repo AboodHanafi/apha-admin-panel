@@ -11,7 +11,7 @@ const initialState = {
   adminData: {
     first: {},
   },
-  loading: false,
+  isLoading: false,
 };
 
 export const adminSlice = createSlice({
@@ -19,20 +19,25 @@ export const adminSlice = createSlice({
   initialState,
   reducers: {},
   extraReducers: (builder) => {
-    builder.addCase(getAdminDataThunk.pending, (state) => {});
+    builder.addCase(getAdminDataThunk.pending, (state) => {
+      state.isLoading = true;
+    });
     builder.addCase(getAdminDataThunk.fulfilled, (state, action) => {
       state.adminData = action.payload?.items;
+      state.isLoading = false;
     });
-    builder.addCase(getAdminDataThunk.rejected, (state, action) => {});
+    builder.addCase(getAdminDataThunk.rejected, (state, action) => {
+      state.isLoading = false;
+    });
     builder.addCase(createOfferThunk.pending, (state) => {
-      state.loading = true;
+      state.isLoading = true;
     });
     builder.addCase(createOfferThunk.fulfilled, (state, action) => {
       toast.success("offer added");
-      state.loading = false;
+      state.isLoading = false;
     });
     builder.addCase(createOfferThunk.rejected, (state, action) => {
-      state.loading = false;
+      state.isLoading = false;
     });
     builder.addCase(createPageThunk.fulfilled, (state, action) => {
       toast.success("page added");

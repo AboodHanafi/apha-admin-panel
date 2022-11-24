@@ -20,32 +20,28 @@ const NavBar = ({ open, handleDrawerOpen }) => {
     <AppBar position="fixed" open={open}>
       <Toolbar
         sx={{
-          backgroundColor: "#0E4C8F",
+          backgroundColor: "#fff",
+          justifyContent: "space-between",
         }}
       >
-        <Stack
-          width={"100%"}
-          direction={"row"}
-          justifyContent={"space-between"}
-          alignItems={"center"}
+        <IconButton
+          color="inherit"
+          aria-label="open drawer"
+          onClick={handleDrawerOpen}
+          edge="start"
         >
-          <Stack direction={"row"}>
-            <IconButton
-              color="inherit"
-              aria-label="open drawer"
-              onClick={handleDrawerOpen}
-              edge="start"
-              sx={{
-                marginRight: 5,
-                ...(open && { display: "none" }),
-              }}
-            >
-              <MenuIcon />
-            </IconButton>
-            <Typography variant="h6" noWrap component="div">
-              Apha admin panel
-            </Typography>
-          </Stack>
+          <MenuIcon
+            fontSize="large"
+            sx={{
+              fill: "#0A0A0A",
+            }}
+          />
+        </IconButton>
+        <Stack spacing={3} direction={"row"} alignItems={"center"}>
+          {/* <Typography fontWeight={400} fontSize={"13px"} color={"#0A0A0A"}>
+            {userData.first_name}&nbsp;
+            {userData.last_name}
+          </Typography> */}
           <Stack
             direction={"row"}
             alignItems={"center"}
@@ -60,10 +56,12 @@ const NavBar = ({ open, handleDrawerOpen }) => {
               aria-expanded={openProfile ? "true" : undefined}
               onClick={handleClick}
               sx={{ bgcolor: deepOrange[500] }}
-            >
-              N
-            </Avatar>
-            <KeyboardArrowDownIcon />
+            />
+            <KeyboardArrowDownIcon
+              sx={{
+                fill: "#0A0A0A",
+              }}
+            />
             <BasicMenu
               open={openProfile}
               handleClose={handleClose}

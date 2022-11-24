@@ -1,12 +1,11 @@
-import DashboardIcon from "@mui/icons-material/Dashboard";
-import LocalOfferIcon from "@mui/icons-material/LocalOffer";
-import HistoryIcon from "@mui/icons-material/History";
-import PagesIcon from "@mui/icons-material/Pages";
-import MedicationIcon from "@mui/icons-material/Medication";
-import LocalHospitalIcon from "@mui/icons-material/LocalHospital";
-import BookOnlineIcon from "@mui/icons-material/BookOnline";
-import ContactPhoneIcon from "@mui/icons-material/ContactPhone";
 import logo from "./logo.png";
+import dashboard from "./dashboard.png";
+import offers from "./offers.png";
+import offersRequest from "./offersRequest.png";
+import medical from "./medical.png";
+import setting from "./setting.png";
+import appointments from "./appointments.png";
+import consultations from "./consultations.png";
 
 export const Images = {
   logo,
@@ -14,50 +13,47 @@ export const Images = {
 export const sideBarItem = [
   {
     id: 1,
-    icon: <DashboardIcon />,
-    text: "dashboard",
+    icon: dashboard,
+    name: "dashboard",
     path: "/",
   },
   {
     id: 2,
-    icon: <LocalOfferIcon />,
-    text: "offers",
-    path: "/offers",
-  },
-  {
-    id: 3,
-    icon: <HistoryIcon />,
-    text: "orders",
-    path: "/orders",
-  },
-  {
-    id: 4,
-    icon: <PagesIcon />,
-    text: "pages",
-    path: "/pages",
-  },
-  {
-    id: 5,
-    icon: <MedicationIcon />,
-    text: "consultations",
+    icon: consultations,
+    name: "consultations",
     path: "/consultations",
   },
   {
-    id: 6,
-    icon: <LocalHospitalIcon />,
-    text: "medical files",
+    id: 3,
+    icon: medical,
+    name: "medical files",
     path: "/medical-files",
   },
   {
-    id: 7,
-    icon: <BookOnlineIcon />,
-    text: "appointments",
+    id: 4,
+    icon: appointments,
+    name: "appointments",
     path: "/appointments",
   },
   {
-    id: 8,
-    icon: <ContactPhoneIcon />,
-    text: "contact information",
-    path: "/contactInfo",
+    id: 5,
+    icon: offers,
+    name: "offers",
+    path: "/offers",
+  },
+  {
+    id: 6,
+    icon: offersRequest,
+    name: "offers request",
+    path: "/offersRequest",
+  },
+  {
+    id: 7,
+    icon: setting,
+    name: "settings",
+    children: [
+      { id: 0, name: "pages", path: "/pages" },
+      { id: 1, name: "contact information", path: "/contactinfo" },
+    ],
   },
 ];

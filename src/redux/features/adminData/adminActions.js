@@ -2,7 +2,7 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 import CRUDRequsests from "../../../apis";
 
-const token = localStorage.getItem("userToken");
+// const token = localStorage.getItem("userToken");
 export const getAdminDataThunk = createAsyncThunk(
   "AdminData/user",
   async ({ url }, thunkApi) => {
@@ -27,7 +27,7 @@ export const createOfferThunk = createAsyncThunk(
     try {
       const { data } = await axios.post(url, filteredData, {
         headers: {
-          Authorization: `Bearer ${token}`,
+          Authorization: `Bearer ${localStorage.getItem("userToken")}`,
           "X-HTTP-Method-Override": params,
         },
       });
@@ -53,7 +53,7 @@ export const createPageThunk = createAsyncThunk(
         },
         {
           headers: {
-            Authorization: `Bearer ${token}`,
+            Authorization: `Bearer ${localStorage.getItem("userToken")}`,
             "X-HTTP-Method-Override": params,
           },
         }
@@ -80,7 +80,7 @@ export const createContactThunk = createAsyncThunk(
         },
         {
           headers: {
-            Authorization: `Bearer ${token}`,
+            Authorization: `Bearer ${localStorage.getItem("userToken")}`,
             "X-HTTP-Method-Override": params,
           },
         }

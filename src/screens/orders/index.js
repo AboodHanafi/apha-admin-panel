@@ -50,6 +50,7 @@ const Orders = () => {
       flex: 1,
       align: "center",
       headerAlign: "center",
+      minWidth: 150,
       renderCell: ({ row }) => (
         <>
           <Typography

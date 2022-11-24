@@ -50,7 +50,7 @@ const OfferForm = () => {
   });
   const [Image, setImage] = useState("");
   const dispatch = useDispatch();
-  const loading = useSelector((state) => state.adminData.loading);
+  const isLoading = useSelector((state) => state.adminData.isLoading);
 
   const onSubmit = async (data) => {
     const filteredData = covertToFormData(data);
@@ -117,7 +117,7 @@ const OfferForm = () => {
   useEffect(() => {
     getUserData();
   }, [params]);
-  if (loading) {
+  if (isLoading) {
     return <CircularProgress />;
   }
   return (

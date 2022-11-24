@@ -13,42 +13,49 @@ const Consultation = () => {
     {
       field: "index",
       headerName: "#",
+      maxWidth: 1,
     },
     {
       field: "name",
       flex: 1,
       align: "center",
       headerAlign: "center",
+      minWidth: 80,
     },
     {
       field: "email",
       flex: 1,
       align: "center",
       headerAlign: "center",
+      minWidth: 80,
     },
     {
       field: "mobile",
       flex: 1,
       align: "center",
       headerAlign: "center",
+      minWidth: 80,
     },
     {
       field: "clinic",
       flex: 1,
       align: "center",
       headerAlign: "center",
+      minWidth: 80,
     },
     {
       field: "doctor",
       flex: 1,
       align: "center",
       headerAlign: "center",
+      minWidth: 80,
     },
     {
       field: "description",
       flex: 1,
       align: "center",
       headerAlign: "center",
+      minWidth: 300,
     },
   ];
   const getData = async () => {

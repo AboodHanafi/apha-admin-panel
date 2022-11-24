@@ -14,14 +14,14 @@ export const authSlice = createSlice({
   reducers: {
     logOut: (state) => {
       state.isAuthed = false;
-      localStorage.removeItem("userToken");
-      localStorage.removeItem(Authed_Storage_Key);
+      localStorage.clear();
+      sessionStorage.clear();
     },
   },
   extraReducers: (builder) => {
     builder.addCase(signInThunk.fulfilled, (state, action) => {
       state.isAuthed = true;
-      localStorage.setItem("userToken", action.payload?.token);
+      localStorage.setItem("userToken", action.payload.token);
       localStorage.setItem(Authed_Storage_Key, "1");
     });
   },
