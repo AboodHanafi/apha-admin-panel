@@ -2,17 +2,41 @@ import * as React from "react";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
+import { Box, IconButton } from "@mui/material";
+import { dashboardItem } from "../../assets";
 
-export default function BasicCard({ bgColor, title, counter }) {
+export default function BasicCard({ Icon, title, counter }) {
   return (
-    <Card sx={{ minWidth: 300, height: "100px", bgcolor: bgColor }}>
+    <Card sx={{ minWidth: 210, height: "190px", boxShadow: "none" }}>
       <CardContent>
-        <Typography sx={{ fontSize: 20 }} color="#fff" gutterBottom>
-          {title}
-        </Typography>
-        <Typography sx={{ fontSize: 20 }} color="#fff" gutterBottom>
-          {counter}
-        </Typography>
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "center",
+            alignItems: "center",
+            padding: "30px",
+            gap: "20px",
+          }}
+        >
+          {Icon}
+          <Typography
+            fontSize={"13px"}
+            fontWeight={600}
+            color="#0E4C8F"
+            gutterBottom
+          >
+            {title}
+          </Typography>
+          <Typography
+            fontSize={"13px"}
+            fontWeight={600}
+            color="#6CA3DE"
+            gutterBottom
+          >
+            {counter}
+          </Typography>
+        </Box>
       </CardContent>
     </Card>
   );

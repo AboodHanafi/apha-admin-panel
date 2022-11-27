@@ -47,21 +47,20 @@ export const ExpandableSideBarItem = ({ openSide, item, navigate }) => {
           />
           <ListItemIcon sx={{ opacity: openSide ? 1 : 0 }}>
             {openChildren ? (
-              <KeyboardArrowDownIcon sx={{ fill: "#FFF" }} />
-            ) : (
               <KeyboardArrowUpIcon sx={{ fill: "#FFF" }} />
+            ) : (
+              <KeyboardArrowDownIcon sx={{ fill: "#FFF" }} />
             )}
           </ListItemIcon>
         </ListItemButton>
       </ListItem>
       {openSide ? (
         <Collapse in={openChildren} timeout="auto" unmountOnExit>
-          <List>
+          <List disablePadding>
             {item.children.map((item) => (
               <ListItem key={item.id} disablePadding sx={{ display: "block" }}>
                 <ListItemButton
                   sx={{
-                    minHeight: 48,
                     justifyContent: openSide ? "initial" : "center",
                     px: 10,
                   }}
