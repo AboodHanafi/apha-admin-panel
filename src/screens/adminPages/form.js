@@ -2,7 +2,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { Button, FormLabel, Stack } from "@mui/material";
 import { useForm } from "react-hook-form";
 import * as yup from "yup";
-import { CustomizedTextField } from "../../GlobalStyle";
+import { CustomButton, CustomizedTextField } from "../../GlobalStyle";
 
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
@@ -10,7 +10,8 @@ import {
   createPageThunk,
   getAdminDataThunk,
 } from "../../redux/features/adminData/adminActions";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
+import { toast } from "react-hot-toast";
 const schema = yup.object({
   description: yup.string().required(),
   title: yup.string().required(),
@@ -28,6 +29,7 @@ const PagesForm = () => {
     resolver: yupResolver(schema),
   });
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const onSubmit = async (data) => {
     const res = await dispatch(
@@ -43,6 +45,10 @@ const PagesForm = () => {
     if (createPageThunk.fulfilled.match(res)) {
       if (!params.id) {
         reset();
+        toast.success("page added");
+      } else {
+        toast.success("page edited");
+        navigate("/pages");
       }
     }
   };
@@ -54,7 +60,6 @@ const PagesForm = () => {
         })
       );
       const data = response.payload.items;
-      console.log(response);
       if (getAdminDataThunk.fulfilled.match(response)) {
         setValue("description", data[0].description);
         setValue("title", data[0].name);
@@ -68,13 +73,20 @@ const PagesForm = () => {
   return (
     <Stack
       spacing={3}
-      width={"30%"}
+      width={"100%"}
       component={"form"}
       onSubmit={handleSubmit(onSubmit)}
     >
-      <Stack id="title">
-        <FormLabel error={errors.title ? true : false}>
-          {errors.title ? errors.title.message : "title"}
+      <Stack spacing={1} id="title">
+        <FormLabel
+          sx={{
+            color: "#0A0A0A",
+            fontSize: "16px",
+            fontWeight: 600,
+          }}
+          error={errors.title ? true : false}
+        >
+          {errors.title ? errors.title.message : "Page Title"}
         </FormLabel>
         <CustomizedTextField
           type={"text"}
@@ -84,21 +96,55 @@ const PagesForm = () => {
         />
       </Stack>
 
-      <Stack id="description">
-        <FormLabel error={errors.description ? true : false}>
-          {errors.description ? errors.description.message : "description"}
+      <Stack spacing={1} id="description">
+        <FormLabel
+          sx={{
+            color: "#0A0A0A",
+            fontSize: "16px",
+            fontWeight: 600,
+          }}
+          error={errors.description ? true : false}
+        >
+          {errors.description ? errors.description.message : "Content"}
         </FormLabel>
         <CustomizedTextField
           id="outlined-textarea"
           placeholder="Add notes here"
           multiline
-          maxRows={5}
+          minRows={17}
           fullWidth
           {...register("description")}
         />
       </Stack>
-      <Stack id="Button">
-        <Button type="submit">submit</Button>
+      <Stack
+        spacing={2}
+        direction={"row"}
+        justifyContent="flex-end"
+        id="Button"
+      >
+        <CustomButton
+          border={"1px solid #0E4C8F"}
+          textcolor="#0E4C8F"
+          variant="contained"
+          sx={{
+            bgcolor: "#fff",
+          }}
+          width={"10%"}
+          onClick={() => navigate("/pages")}
+        >
+          back
+        </CustomButton>
+        <CustomButton
+          textcolor="#f4f4f4"
+          variant="contained"
+          sx={{
+            bgcolor: "#0E4C8F",
+          }}
+          width={"10%"}
+          type="submit"
+        >
+          submit
+        </CustomButton>
       </Stack>
     </Stack>
   );

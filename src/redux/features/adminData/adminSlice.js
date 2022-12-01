@@ -39,16 +39,14 @@ export const adminSlice = createSlice({
     builder.addCase(createOfferThunk.rejected, (state, action) => {
       state.isLoading = false;
     });
-    builder.addCase(createPageThunk.fulfilled, (state, action) => {
-      toast.success("page added");
+    builder.addCase(createPageThunk.fulfilled, (state, action) => {});
+    builder.addCase(createPageThunk.rejected, (state, action) => {
+      toast.error(action.payload.msg.message);
     });
-    builder.addCase(createPageThunk.rejected, (state, action) => {});
     builder.addCase(createContactThunk.fulfilled, (state, action) => {
       toast.success("contact added");
     });
-    builder.addCase(createContactThunk.rejected, (state, action) => {
-      console.log(action.payload);
-    });
+    builder.addCase(createContactThunk.rejected, (state, action) => {});
   },
 });
 

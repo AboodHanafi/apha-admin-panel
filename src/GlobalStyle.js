@@ -1,5 +1,5 @@
 import styled from "@emotion/styled";
-import { TextField } from "@mui/material";
+import { Button, TextField } from "@mui/material";
 
 export const CustomizedTextField = styled(TextField)`
   background-color: #fff;
@@ -41,5 +41,17 @@ export const CustomizedTextField = styled(TextField)`
   }
   .Mui-focused {
     background-color: #fff !important;
+  }
+`;
+
+export const CustomButton = styled(Button)`
+  color: ${(props) => (props.textcolor ? props.textcolor : "#fff")};
+  border-radius: 4px;
+  padding: 12px 16px;
+  box-shadow: ${(props) => (props.boxshadow ? props.boxshadow : "none")};
+  border: ${(props) => (props.border ? props.border : "none")};
+  width: ${(props) => (props.width ? props.width : "100%")};
+  :hover {
+    box-shadow: none;
   }
 `;

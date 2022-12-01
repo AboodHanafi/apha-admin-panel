@@ -9,6 +9,7 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "react-hot-toast";
 import axios from "axios";
 import ConfirmDialog from "../../components/confirmationMessage";
+import { CustomButton } from "../../GlobalStyle";
 
 const AdminPages = () => {
   const dispatch = useDispatch();
@@ -92,19 +93,30 @@ const AdminPages = () => {
   }, []);
   return (
     <Stack spacing={4}>
-      <Typography fontWeight={600} fontSize={"16px"} color={"#0A0A0A"}>
-        pages
-      </Typography>
-      <Stack alignItems={"start"} width={"100%"}>
-        <Button onClick={() => navigate("/create-page")}>Add new page</Button>
+      <Stack direction={"row"} justifyContent={"space-between"} width={"100%"}>
+        <Typography fontWeight={600} fontSize={"16px"} color={"#0A0A0A"}>
+          pages
+        </Typography>
+
+        <CustomButton
+          textcolor="#f4f4f4"
+          variant="contained"
+          sx={{
+            bgcolor: "#0E4C8F",
+          }}
+          width={"15%"}
+          onClick={() => navigate("/create-page")}
+        >
+          Add page
+        </CustomButton>
         <ConfirmDialog
           open={confirmOpen}
           handleClose={handleClose}
           handleDelete={handleDelete}
           id={IdTodelete}
         />
-        <BasicTable columns={offers} rows={data ? data : []} />
       </Stack>
+      <BasicTable columns={offers} rows={data ? data : []} />
     </Stack>
   );
 };

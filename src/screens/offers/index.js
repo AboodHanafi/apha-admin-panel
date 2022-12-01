@@ -10,6 +10,7 @@ import ConfirmDialog from "../../components/confirmationMessage";
 import axios from "axios";
 import { toast } from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
+import { CustomButton } from "../../GlobalStyle";
 
 const Offers = () => {
   const dispatch = useDispatch();
@@ -129,11 +130,23 @@ const Offers = () => {
   };
   return (
     <Stack spacing={4}>
-      <Typography fontWeight={600} fontSize={"16px"} color={"#0A0A0A"}>
-        Offers
-      </Typography>
-      <Stack alignItems={"start"} width={"100%"}>
-        <Button onClick={() => navigate("/create-offer")}>Add offer</Button>
+      <Stack direction={"row"} justifyContent={"space-between"} width={"100%"}>
+        <Typography fontWeight={600} fontSize={"16px"} color={"#0A0A0A"}>
+          Offers
+        </Typography>
+
+        <CustomButton
+          CustomButton
+          textcolor="#f4f4f4"
+          variant="contained"
+          sx={{
+            bgcolor: "#0E4C8F",
+          }}
+          width={"15%"}
+          onClick={() => navigate("/create-offer")}
+        >
+          Add offer
+        </CustomButton>
         <CustomizedDialogs
           src={image}
           alt={image}
@@ -146,8 +159,8 @@ const Offers = () => {
           handleDelete={handleDelete}
           id={IdTodelete}
         />
-        <BasicTable columns={offers} rows={data} />
       </Stack>
+      <BasicTable columns={offers} rows={data} />
     </Stack>
   );
 };

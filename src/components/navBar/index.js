@@ -20,7 +20,6 @@ const NavBar = ({ open, handleDrawerOpen }) => {
     <AppBar position="fixed" open={open}>
       <Toolbar
         sx={{
-          backgroundColor: "#fff",
           justifyContent: "space-between",
         }}
       >
@@ -51,9 +50,9 @@ const NavBar = ({ open, handleDrawerOpen }) => {
           >
             <Avatar
               id="basic-button"
-              aria-controls={openProfile ? "basic-menu" : undefined}
-              aria-haspopup="true"
-              aria-expanded={openProfile ? "true" : undefined}
+              // aria-controls={openProfile ? "basic-menu" : undefined}
+              // aria-haspopup="true"
+              // aria-expanded={openProfile ? "true" : undefined}
               onClick={handleClick}
               sx={{ bgcolor: deepOrange[500] }}
             />

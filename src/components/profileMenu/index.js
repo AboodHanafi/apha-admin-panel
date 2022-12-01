@@ -3,7 +3,6 @@ import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import { useDispatch } from "react-redux";
 import { logOut } from "../../redux/features/auth/authSlice";
-import LogoutIcon from "@mui/icons-material/Logout";
 
 export default function BasicMenu({ anchorEl, open, handleClose }) {
   const dispatch = useDispatch();

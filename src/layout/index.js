@@ -31,8 +31,7 @@ export default function LayOut({ children }) {
           flexGrow: 1,
           p: isAuthed ? "50px 80px 50px " : 0,
           mt: isAuthed ? "60px" : 0,
-          height: "100vh",
-          overflow: "auto",
+          minHeight: `calc(100vh - 60px)`,
           bgcolor: "#f4f4f4",
         }}
       >
