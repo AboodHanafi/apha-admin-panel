@@ -1,41 +1,22 @@
 import * as React from "react";
-import Avatar from "@mui/material/Avatar";
-import Button from "@mui/material/Button";
+
 import CssBaseline from "@mui/material/CssBaseline";
-import TextField from "@mui/material/TextField";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Checkbox from "@mui/material/Checkbox";
 import Link from "@mui/material/Link";
 import Paper from "@mui/material/Paper";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
-import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
-import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { signInThunk } from "../../redux/features/auth/authActions";
 import { toast } from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { IconButton, InputAdornment } from "@mui/material";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
-
-function Copyright(props) {
-  return (
-    <Typography
-      variant="body2"
-      color="text.secondary"
-      align="center"
-      {...props}
-    >
-      {"Copyright © "}
-      <Link color="inherit" href="#">
-        Your Website
-      </Link>{" "}
-      {new Date().getFullYear()}
-      {"."}
-    </Typography>
-  );
-}
+import { Images } from "../../assets";
+import { CustomButton, CustomizedTextField } from "../../GlobalStyle";
+import { Stack } from "@mui/system";
 
 export default function SignInSide() {
   const [showPassword, setShowPassword] = React.useState(false);
@@ -70,25 +51,26 @@ export default function SignInSide() {
   }, [isAuthed]);
 
   return (
-    <Grid container component="main" sx={{ height: "90vh" }}>
+    <Grid
+      container
+      component="main"
+      sx={{
+        height: "100vh",
+        justifyContent: "end",
+      }}
+    >
       <CssBaseline />
+
       <Grid
+        bgcolor={"rgba(27, 31, 35, 1)"}
         item
-        xs={false}
-        sm={5}
-        md={8}
-        sx={{
-          backgroundImage: "url(https://source.unsplash.com/random)",
-          backgroundRepeat: "no-repeat",
-          backgroundColor: (t) =>
-            t.palette.mode === "light"
-              ? t.palette.grey[50]
-              : t.palette.grey[900],
-          backgroundSize: "cover",
-          backgroundPosition: "center",
-        }}
-      />
-      <Grid item xs={12} sm={7} md={4} component={Paper} elevation={6} square>
+        xs={12}
+        sm={7}
+        md={4}
+        component={Paper}
+        elevation={6}
+        square
+      >
         <Box
           sx={{
             my: 8,
@@ -98,72 +80,97 @@ export default function SignInSide() {
             alignItems: "center",
           }}
         >
-          <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
-            <LockOutlinedIcon />
-          </Avatar>
-          <Typography component="h1" variant="h5">
-            Sign in
-          </Typography>
+          <img width={"120px"} height={"100px"} src={Images.logo} alt="" />
+
           <Box
             component="form"
             noValidate
             onSubmit={handleSubmit}
             sx={{ mt: 1 }}
           >
-            <TextField
+            <CustomizedTextField
               margin="normal"
+              variant="outlined"
               required
               fullWidth
               id="email"
               name="email"
+              placeholder="email"
               autoComplete="email"
               autoFocus
             />
-            <TextField
+            <CustomizedTextField
               margin="normal"
               required
               fullWidth
+              placeholder="password"
+              variant="outlined"
               name="password"
               type={showPassword ? "text" : "password"}
               id="password"
               autoComplete="current-password"
-              endAdornment={
-                <InputAdornment position="end">
-                  <IconButton
-                    aria-label="toggle password visibility"
-                    onClick={() => setShowPassword(!showPassword)}
-                    edge="end"
-                  >
-                    {showPassword ? <VisibilityOff /> : <Visibility />}
-                  </IconButton>
-                </InputAdornment>
-              }
+              InputProps={{
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <IconButton
+                      aria-label="toggle password visibility"
+                      onClick={() => setShowPassword(!showPassword)}
+                      edge="end"
+                    >
+                      {showPassword ? <VisibilityOff /> : <Visibility />}
+                    </IconButton>
+                  </InputAdornment>
+                ),
+              }}
             />
-            <FormControlLabel
-              control={<Checkbox value="remember" color="primary" />}
-              label="Remember me"
-            />
-            <Button
+
+            <Stack
+              direction={"row"}
+              justifyContent={"space-between"}
+              alignItems={"center"}
+              mb={"80px"}
+            >
+              <FormControlLabel
+                sx={{
+                  color: "rgba(244, 244, 244, 1)",
+                }}
+                control={<Checkbox value="remember" color="primary" />}
+                label="Remember me"
+              />
+
+              <Link
+                underline="none"
+                color={"rgba(11, 184, 79, 1)"}
+                href="#"
+                variant="body2"
+              >
+                Forgot password?
+              </Link>
+            </Stack>
+
+            <CustomButton
               type="submit"
               fullWidth
               variant="contained"
-              sx={{ mt: 3, mb: 2 }}
+              textcolor="rgba(108, 163, 222, 1)"
+              boxshadow="0px 0px 4px 4px rgba(160, 179, 197, 0.8)"
+              sx={{ mt: 3, mb: 2, bgcolor: "#F4F4F4" }}
             >
               Sign In
-            </Button>
-            <Grid container>
-              <Grid item xs>
-                <Link href="#" variant="body2">
-                  Forgot password?
-                </Link>
-              </Grid>
-              <Grid item>
-                <Link href="#" variant="body2">
-                  {"Don't have an account? Sign Up"}
-                </Link>
-              </Grid>
-            </Grid>
-            <Copyright sx={{ mt: 5 }} />
+            </CustomButton>
+            <Stack
+              direction={"row"}
+              justifyContent={"center"}
+              alignItems={"center"}
+              spacing={1}
+            >
+              <Typography color={"rgba(244, 244, 244, 1)"}>
+                Don't have an account ?
+              </Typography>
+              <Link underline="none" href="#" variant="body2">
+                {"Sign Up"}
+              </Link>
+            </Stack>
           </Box>
         </Box>
       </Grid>

@@ -23,19 +23,24 @@ const NavBar = ({ open, handleDrawerOpen }) => {
           justifyContent: "space-between",
         }}
       >
-        <IconButton
-          color="inherit"
-          aria-label="open drawer"
-          onClick={handleDrawerOpen}
-          edge="start"
-        >
-          <MenuIcon
-            fontSize="large"
-            sx={{
-              fill: "#0A0A0A",
-            }}
-          />
-        </IconButton>
+        <Stack direction={"row"} spacing={1} alignItems="center">
+          <IconButton
+            color="inherit"
+            aria-label="open drawer"
+            onClick={handleDrawerOpen}
+            edge="start"
+          >
+            <MenuIcon
+              fontSize="large"
+              sx={{
+                fill: "#0A0A0A",
+              }}
+            />
+          </IconButton>
+          <Typography fontWeight={600} color={"#0A0A0A"}>
+            Abha Admin Panel
+          </Typography>
+        </Stack>
         <Stack spacing={3} direction={"row"} alignItems={"center"}>
           {/* <Typography fontWeight={400} fontSize={"13px"} color={"#0A0A0A"}>
             {userData.first_name}&nbsp;

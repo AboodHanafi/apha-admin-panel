@@ -3,9 +3,10 @@ import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
-import { Button, Divider, MenuItem, Select } from "@mui/material";
+import { Button, Divider, FormLabel, MenuItem, Select } from "@mui/material";
 import { toast } from "react-hot-toast";
 import axios from "axios";
+import { CustomButton } from "../../GlobalStyle";
 
 export default function StatusDialog({
   open,
@@ -56,20 +57,29 @@ export default function StatusDialog({
     >
       <DialogTitle
         sx={{
-          color: "#1d1d1d",
+          color: "rgba(10, 10, 10, 1)",
         }}
         fontWeight={600}
+        fontSize={"16px"}
         id="alert-dialog-title"
       >
-        choose new status :
+        Edit Status
       </DialogTitle>
-      <Divider />
       <DialogContent
         sx={{
           width: "300px",
           height: "200px",
         }}
       >
+        <FormLabel
+          sx={{
+            color: "#0A0A0A",
+            fontSize: "16px",
+            fontWeight: 600,
+          }}
+        >
+          Status
+        </FormLabel>
         <Select
           id="demo-simple-select"
           value={orderStatus}
@@ -86,19 +96,32 @@ export default function StatusDialog({
         </Select>
       </DialogContent>
       <DialogActions>
-        <Button
-          color="secondary"
+        <CustomButton
+          textcolor="#f4f4f4"
           variant="contained"
+          sx={{
+            bgcolor: "#0E4C8F",
+          }}
+          width={"10%"}
           onClick={() => {
             handleEdit();
             handleClose();
           }}
         >
           Confirm
-        </Button>
-        <Button variant="contained" onClick={handleClose} autoFocus>
+        </CustomButton>
+        <CustomButton
+          border={"1px solid #0E4C8F"}
+          textcolor="#0E4C8F"
+          variant="contained"
+          sx={{
+            bgcolor: "#fff",
+          }}
+          width={"10%"}
+          onClick={handleClose}
+        >
           Cancel
-        </Button>
+        </CustomButton>
       </DialogActions>
     </Dialog>
   );

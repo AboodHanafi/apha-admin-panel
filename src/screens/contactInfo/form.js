@@ -2,7 +2,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { Autocomplete, Button, FormLabel, Stack } from "@mui/material";
 import { useForm } from "react-hook-form";
 import * as yup from "yup";
-import { CustomizedTextField } from "../../GlobalStyle";
+import { CustomButton, CustomizedTextField } from "../../GlobalStyle";
 
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
@@ -11,7 +11,7 @@ import {
   createPageThunk,
   getAdminDataThunk,
 } from "../../redux/features/adminData/adminActions";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 const schema = yup.object({
   type: yup.string().required(),
   value: yup.string().required(),
@@ -29,6 +29,7 @@ const ContactForm = () => {
     resolver: yupResolver(schema),
   });
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const onSubmit = async (data) => {
     const res = await dispatch(
@@ -74,8 +75,24 @@ const ContactForm = () => {
       component={"form"}
       onSubmit={handleSubmit(onSubmit)}
     >
+      <FormLabel
+        sx={{
+          color: "rgba(10, 10, 10, 1)",
+          fontWeight: 600,
+          fontSize: "16px",
+        }}
+      >
+        {params.id ? "Edit Contact " : "Add Contact"}
+      </FormLabel>
       <Stack id="type">
-        <FormLabel error={errors.type ? true : false}>
+        <FormLabel
+          sx={{
+            color: "rgba(10, 10, 10, 1)",
+            fontWeight: 500,
+            fontSize: "16px",
+          }}
+          error={errors.type ? true : false}
+        >
           {errors.type ? errors.type.message : "type"}
         </FormLabel>
 
@@ -94,7 +111,14 @@ const ContactForm = () => {
       </Stack>
 
       <Stack id="value">
-        <FormLabel error={errors.value ? true : false}>
+        <FormLabel
+          sx={{
+            color: "rgba(10, 10, 10, 1)",
+            fontWeight: 500,
+            fontSize: "16px",
+          }}
+          error={errors.value ? true : false}
+        >
           {errors.value ? errors.value.message : "value"}
         </FormLabel>
         <CustomizedTextField
@@ -106,8 +130,29 @@ const ContactForm = () => {
           {...register("value")}
         />
       </Stack>
-      <Stack id="Button">
-        <Button type="submit">submit</Button>
+
+      <Stack spacing={2} direction={"row"} width={"100%"} id="Button">
+        <CustomButton
+          border={"1px solid #0E4C8F"}
+          textcolor="#0E4C8F"
+          variant="contained"
+          sx={{
+            bgcolor: "#fff",
+          }}
+          onClick={() => navigate("/contactinfo")}
+        >
+          back
+        </CustomButton>
+        <CustomButton
+          textcolor="#f4f4f4"
+          variant="contained"
+          sx={{
+            bgcolor: "#0E4C8F",
+          }}
+          type="submit"
+        >
+          submit
+        </CustomButton>
       </Stack>
     </Stack>
   );

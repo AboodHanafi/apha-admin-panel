@@ -19,24 +19,28 @@ const Appointments = () => {
       flex: 1,
       align: "center",
       headerAlign: "center",
+      minWidth: 200,
     },
     {
       field: "email",
       flex: 1,
       align: "center",
       headerAlign: "center",
+      minWidth: 150,
     },
     {
       field: "mobile",
       flex: 1,
       align: "center",
       headerAlign: "center",
+      minWidth: 150,
     },
     {
       field: "clinic",
       flex: 1,
       align: "center",
       headerAlign: "center",
+      minWidth: 80,
     },
     {
       field: "doctors",
@@ -44,6 +48,7 @@ const Appointments = () => {
       flex: 1,
       align: "center",
       headerAlign: "center",
+      minWidth: 150,
     },
     {
       field: "availableDay",
@@ -51,6 +56,7 @@ const Appointments = () => {
       flex: 1,
       align: "center",
       headerAlign: "center",
+      minWidth: 150,
     },
     {
       field: "availableTimes",
@@ -58,6 +64,7 @@ const Appointments = () => {
       flex: 1,
       align: "center",
       headerAlign: "center",
+      minWidth: 150,
     },
   ];
   const getData = async () => {

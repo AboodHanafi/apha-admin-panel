@@ -23,18 +23,21 @@ const MedicalFiles = () => {
       flex: 1,
       align: "center",
       headerAlign: "center",
+      minWidth: 200,
     },
     {
       field: "email",
       flex: 1,
       align: "center",
       headerAlign: "center",
+      minWidth: 150,
     },
     {
       field: "mobile",
       flex: 1,
       align: "center",
       headerAlign: "center",
+      minWidth: 150,
     },
     {
       field: "identity_number",
@@ -42,6 +45,7 @@ const MedicalFiles = () => {
       flex: 1,
       align: "center",
       headerAlign: "center",
+      minWidth: 150,
     },
     {
       field: "paying_type",
@@ -49,6 +53,7 @@ const MedicalFiles = () => {
       flex: 1,
       align: "center",
       headerAlign: "center",
+      minWidth: 150,
     },
     {
       field: "insurance_number",
@@ -56,12 +61,14 @@ const MedicalFiles = () => {
       flex: 1,
       align: "center",
       headerAlign: "center",
+      minWidth: 150,
     },
     {
       field: "image",
       flex: 1,
       align: "center",
       headerAlign: "center",
+      minWidth: 80,
       renderCell: ({ row }) => (
         <IconButton key={row.id} onClick={() => handleView(row.image)}>
           <Visibility />

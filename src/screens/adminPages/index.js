@@ -28,12 +28,14 @@ const AdminPages = () => {
       flex: 1,
       align: "center",
       headerAlign: "center",
+      minWidth: 150,
     },
     {
       field: "description",
       flex: 1,
       align: "center",
       headerAlign: "center",
+      minWidth: 200,
     },
 
     {
@@ -41,13 +43,22 @@ const AdminPages = () => {
       flex: 1,
       align: "center",
       headerAlign: "center",
+      minWidth: 150,
       renderCell: ({ row }) => (
         <>
           <IconButton key={row.id} onClick={() => navigate(`/page/${row.id}`)}>
-            <EditIcon />
+            <EditIcon
+              sx={{
+                fill: "rgba(249, 170, 28, 1)",
+              }}
+            />
           </IconButton>
           <IconButton key={row.id} onClick={() => handleOpenConfirm(row.id)}>
-            <Delete />
+            <Delete
+              sx={{
+                fill: "rgba(231, 20, 20, 1)",
+              }}
+            />
           </IconButton>
         </>
       ),
@@ -93,7 +104,12 @@ const AdminPages = () => {
   }, []);
   return (
     <Stack spacing={4}>
-      <Stack direction={"row"} justifyContent={"space-between"} width={"100%"}>
+      <Stack
+        direction={"row"}
+        alignItems={"center"}
+        justifyContent={"space-between"}
+        width={"100%"}
+      >
         <Typography fontWeight={600} fontSize={"16px"} color={"#0A0A0A"}>
           pages
         </Typography>

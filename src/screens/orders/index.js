@@ -23,6 +23,7 @@ const Orders = () => {
       flex: 1,
       align: "center",
       headerAlign: "center",
+      minWidth: 150,
     },
     {
       field: "offer_id",
@@ -30,12 +31,14 @@ const Orders = () => {
       flex: 1,
       align: "center",
       headerAlign: "center",
+      minWidth: 150,
     },
     {
       field: "code",
       flex: 1,
       align: "center",
       headerAlign: "center",
+      minWidth: 150,
     },
 
     {
@@ -44,6 +47,7 @@ const Orders = () => {
       flex: 1,
       align: "center",
       headerAlign: "center",
+      minWidth: 150,
     },
     {
       field: "status",
@@ -77,7 +81,11 @@ const Orders = () => {
               onClick={() => handleOpen(row.id, row.status)}
               key={row.id}
             >
-              <EditIcon />
+              <EditIcon
+                sx={{
+                  fill: "rgba(249, 170, 28, 1)",
+                }}
+              />
             </IconButton>
           </Tooltip>
         </>

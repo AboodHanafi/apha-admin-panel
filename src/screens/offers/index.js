@@ -31,18 +31,21 @@ const Offers = () => {
       flex: 1,
       align: "center",
       headerAlign: "center",
+      minWidth: 200,
     },
     {
       field: "price",
       flex: 1,
       align: "center",
       headerAlign: "center",
+      minWidth: 150,
     },
     {
       field: "clinic",
       flex: 1,
       align: "center",
       headerAlign: "center",
+      minWidth: 80,
     },
     {
       field: "expier",
@@ -50,21 +53,28 @@ const Offers = () => {
       flex: 1,
       align: "center",
       headerAlign: "center",
+      minWidth: 150,
     },
     {
       field: "description",
       flex: 1,
       align: "center",
       headerAlign: "center",
+      minWidth: 200,
     },
     {
       field: "image",
       flex: 1,
       align: "center",
       headerAlign: "center",
+      minWidth: 80,
       renderCell: ({ row }) => (
         <IconButton key={row.id} onClick={() => handleView(row.image)}>
-          <Visibility />
+          <Visibility
+            sx={{
+              fill: "rgba(60, 192, 185, 1)",
+            }}
+          />
         </IconButton>
       ),
     },
@@ -73,13 +83,22 @@ const Offers = () => {
       flex: 1,
       align: "center",
       headerAlign: "center",
+      minWidth: 80,
       renderCell: ({ row }) => (
         <>
           <IconButton key={row.id} onClick={() => navigate(`/offer/${row.id}`)}>
-            <EditIcon />
+            <EditIcon
+              sx={{
+                fill: "rgba(249, 170, 28, 1)",
+              }}
+            />
           </IconButton>
           <IconButton key={row.id} onClick={() => handleOpenConfirm(row.id)}>
-            <Delete />
+            <Delete
+              sx={{
+                fill: "rgba(231, 20, 20, 1)",
+              }}
+            />
           </IconButton>
         </>
       ),
@@ -130,7 +149,12 @@ const Offers = () => {
   };
   return (
     <Stack spacing={4}>
-      <Stack direction={"row"} justifyContent={"space-between"} width={"100%"}>
+      <Stack
+        direction={"row"}
+        alignItems={"center"}
+        justifyContent={"space-between"}
+        width={"100%"}
+      >
         <Typography fontWeight={600} fontSize={"16px"} color={"#0A0A0A"}>
           Offers
         </Typography>

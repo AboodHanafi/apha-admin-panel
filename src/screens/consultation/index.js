@@ -20,21 +20,21 @@ const Consultation = () => {
       flex: 1,
       align: "center",
       headerAlign: "center",
-      minWidth: 80,
+      minWidth: 150,
     },
     {
       field: "email",
       flex: 1,
       align: "center",
       headerAlign: "center",
-      minWidth: 80,
+      minWidth: 150,
     },
     {
       field: "mobile",
       flex: 1,
       align: "center",
       headerAlign: "center",
-      minWidth: 80,
+      minWidth: 150,
     },
     {
       field: "clinic",
@@ -48,7 +48,7 @@ const Consultation = () => {
       flex: 1,
       align: "center",
       headerAlign: "center",
-      minWidth: 80,
+      minWidth: 150,
     },
     {
       field: "description",

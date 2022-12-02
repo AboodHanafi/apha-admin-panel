@@ -48,6 +48,7 @@ export const CustomButton = styled(Button)`
   color: ${(props) => (props.textcolor ? props.textcolor : "#fff")};
   border-radius: 4px;
   padding: 12px 16px;
+  min-width: 150px;
   box-shadow: ${(props) => (props.boxshadow ? props.boxshadow : "none")};
   border: ${(props) => (props.border ? props.border : "none")};
   width: ${(props) => (props.width ? props.width : "100%")};
