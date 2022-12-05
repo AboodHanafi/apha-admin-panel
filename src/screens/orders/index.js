@@ -18,20 +18,22 @@ const Orders = () => {
       headerName: "#",
     },
     {
-      field: "user_id",
+      field: "user",
       headerName: "name",
       flex: 1,
       align: "center",
       headerAlign: "center",
       minWidth: 150,
+      renderCell: ({ value }) => value.first_name + " " + value.last_name,
     },
     {
-      field: "offer_id",
+      field: "offer",
       headerName: "offer name",
       flex: 1,
       align: "center",
       headerAlign: "center",
       minWidth: 150,
+      renderCell: ({ value }) => value.title,
     },
     {
       field: "code",
@@ -65,10 +67,12 @@ const Orders = () => {
               borderRadius: "10px",
               minWidth: "100px",
               background:
-                row.status === "Pending"
+                row.status === "pending"
                   ? "#F59D18"
-                  : row.status === "Completed"
+                  : row.status === "completed"
                   ? "#0CA437"
+                  : row.status === "scheduled"
+                  ? "#00bcd4"
                   : "#BF1C1C",
               textAlign: "center",
               padding: "10px",

@@ -28,14 +28,14 @@ const AdminPages = () => {
       flex: 1,
       align: "center",
       headerAlign: "center",
-      minWidth: 150,
+      minWidth: 200,
     },
     {
       field: "description",
       flex: 1,
       align: "center",
       headerAlign: "center",
-      minWidth: 200,
+      minWidth: 300,
     },
 
     {

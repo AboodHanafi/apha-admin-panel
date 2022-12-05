@@ -1,17 +1,24 @@
 import { yupResolver } from "@hookform/resolvers/yup";
-import { Autocomplete, Button, FormLabel, Stack } from "@mui/material";
+import {
+  Autocomplete,
+  Button,
+  CircularProgress,
+  FormLabel,
+  Stack,
+} from "@mui/material";
 import { useForm } from "react-hook-form";
 import * as yup from "yup";
 import { CustomButton, CustomizedTextField } from "../../GlobalStyle";
 
 import { useEffect } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import {
   createContactThunk,
   createPageThunk,
   getAdminDataThunk,
 } from "../../redux/features/adminData/adminActions";
 import { useNavigate, useParams } from "react-router-dom";
+import { toast } from "react-hot-toast";
 const schema = yup.object({
   type: yup.string().required(),
   value: yup.string().required(),
@@ -30,6 +37,7 @@ const ContactForm = () => {
   });
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const isLoading = useSelector((state) => state.adminData.isLoading);
 
   const onSubmit = async (data) => {
     const res = await dispatch(
@@ -42,9 +50,13 @@ const ContactForm = () => {
         params: params.id ? "put" : "",
       })
     );
-    if (createPageThunk.fulfilled.match(res)) {
+    if (createContactThunk.fulfilled.match(res)) {
       if (!params.id) {
         reset();
+        toast.success("contact added");
+      } else {
+        navigate("/contactinfo");
+        toast.success("contact edited");
       }
     }
   };
@@ -67,11 +79,13 @@ const ContactForm = () => {
   }, [params]);
 
   const contactType = ["FB", "TW", "IG", "TK", "SC", "WA", "YT", "E", "PH"];
-
+  if (isLoading) {
+    return <CircularProgress />;
+  }
   return (
     <Stack
       spacing={3}
-      width={"30%"}
+      width={"40%"}
       component={"form"}
       onSubmit={handleSubmit(onSubmit)}
     >
@@ -136,6 +150,7 @@ const ContactForm = () => {
           border={"1px solid #0E4C8F"}
           textcolor="#0E4C8F"
           variant="contained"
+          width={"49%"}
           sx={{
             bgcolor: "#fff",
           }}
@@ -146,6 +161,7 @@ const ContactForm = () => {
         <CustomButton
           textcolor="#f4f4f4"
           variant="contained"
+          width={"49%"}
           sx={{
             bgcolor: "#0E4C8F",
           }}

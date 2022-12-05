@@ -49,6 +49,7 @@ BootstrapDialogTitle.propTypes = {
 };
 
 export default function CustomizedDialogs({ src, alt, open, setOpen }) {
+  console.log({ src });
   const handleClose = () => {
     setOpen(false);
   };

@@ -25,33 +25,30 @@ import {
 import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import { BrokenImageOutlined } from "@mui/icons-material";
+import { toast } from "react-hot-toast";
 const schema = yup.object({
   description: yup.string().required(),
   title: yup.string().required(),
   price: yup.string().required(),
   clinic: yup.string().required(),
-  logo: yup.mixed().test((value) => {
-    return value && value.length;
-  }),
 });
 
 const OfferForm = () => {
+  const [offerData, setOfferData] = useState();
   const [valueTo, setValueTo] = useState(format(new Date(), "yyyy-MM-dd"));
-  const [ChangeValueTo, setChangeValueTo] = useState(
-    format(new Date(), "yyyy-MM-dd")
-  );
+
   const params = useParams();
   const {
     register,
     handleSubmit,
     reset,
     setValue,
-    watch,
     formState: { errors },
   } = useForm({
     resolver: yupResolver(schema),
   });
   const [Image, setImage] = useState("");
+  const [initImage, setInitImage] = useState("");
   const dispatch = useDispatch();
   const isLoading = useSelector((state) => state.adminData.isLoading);
   const navigate = useNavigate();
@@ -69,8 +66,11 @@ const OfferForm = () => {
     if (createOfferThunk.fulfilled.match(res)) {
       if (!params.id) {
         reset();
+        setValueTo(format(new Date(), "yyyy-MM-dd"));
+        toast.success("offer added");
       } else {
         navigate("/offers");
+        toast.success("offer edited");
       }
     }
   };
@@ -78,7 +78,7 @@ const OfferForm = () => {
     const formData = new FormData();
     formData.append("clinic", data.clinic);
     formData.append("description", data.description);
-    formData.append("image", data.logo[0]);
+    if (Image) formData.append("image", Image);
     formData.append("price", data.price);
     formData.append("title", data.title);
     formData.append("expier", valueTo);
@@ -95,18 +95,23 @@ const OfferForm = () => {
       );
       const data = response.payload.items;
       if (getAdminDataThunk.fulfilled.match(response)) {
+        setOfferData(data[0]);
         setValue("description", data[0].description);
         setValue("clinic", data[0].clinic);
         setValue("title", data[0].title);
         setValue("price", data[0].price);
-        setValueTo(data[0].expier);
-        setImage(data[0].image);
+        setInitImage(data[0].image);
       }
     }
   };
   useEffect(() => {
     getUserData();
   }, [params]);
+  useEffect(() => {
+    if (offerData && offerData.id) {
+      setValueTo(offerData.expier);
+    }
+  }, [offerData]);
   if (isLoading) {
     return <CircularProgress />;
   }
@@ -193,14 +198,11 @@ const OfferForm = () => {
           </FormLabel>
           <LocalizationProvider dateAdapter={AdapterDayjs}>
             <DatePicker
-              disablePast
+              // disablePast
               openTo="year"
               value={valueTo}
               onChange={(newValueTo) => {
-                setChangeValueTo(newValueTo);
-              }}
-              onClose={() => {
-                setValueTo(format(new Date(ChangeValueTo), "yyyy-MM-dd"));
+                setValueTo(format(new Date(newValueTo), "yyyy-MM-dd"));
               }}
               renderInput={(params) => (
                 <CustomizedTextField
@@ -230,26 +232,36 @@ const OfferForm = () => {
 
         <Stack
           width={"100%"}
-          justifyContent={"space-between"}
-          direction={"row"}
+          // justifyContent={"space-between"}
+          // direction={"row"}
         >
-          {params.id ? (
-            <>
-              <Box
-                component={"label"}
-                justifyContent={"center"}
-                alignItems="center"
-                sx={{
-                  display: "flex",
-                  bgcolor: "#fff",
-                  flexDirection: "column",
-                  cursor: "pointer",
-                  border: "1px dashed rgba(10, 10, 10, 0.2)",
-                  borderRadius: "4px",
-                  width: "49%",
-                  height: "110px",
+          <Box
+            component={"label"}
+            justifyContent={"center"}
+            alignItems="center"
+            sx={{
+              display: "flex",
+              bgcolor: "#fff",
+              flexDirection: "column",
+              cursor: "pointer",
+              border: "1px dashed rgba(10, 10, 10, 0.2)",
+              borderRadius: "4px",
+              width: "100%",
+              height: "110px",
+            }}
+          >
+            {Image || initImage ? (
+              <img
+                width={"100%"}
+                height="100%"
+                style={{
+                  objectFit: "contain",
                 }}
-              >
+                src={Image ? URL.createObjectURL(Image) : initImage}
+                alt=""
+              />
+            ) : (
+              <>
                 <BrokenImageOutlined
                   sx={{
                     fill: "rgba(10, 10, 10, 0.2)",
@@ -259,60 +271,17 @@ const OfferForm = () => {
                 <Typography fontSize={"12px"} fontWeight={500}>
                   Upload logo here
                 </Typography>
-                <input
-                  hidden
-                  accept="image/*"
-                  type="file"
-                  {...register("logo")}
-                />
-              </Box>
-              <Stack width={"49%"}>
-                <img
-                  width={"300px"}
-                  height="200px"
-                  style={{
-                    objectFit: "contain",
-                  }}
-                  src={Image}
-                  alt=""
-                />
-              </Stack>
-            </>
-          ) : (
-            <>
-              <Box
-                component={"label"}
-                justifyContent={"center"}
-                alignItems="center"
-                sx={{
-                  display: "flex",
-                  bgcolor: "#fff",
-                  flexDirection: "column",
-                  cursor: "pointer",
-                  border: "1px dashed rgba(10, 10, 10, 0.2)",
-                  borderRadius: "4px",
-                  width: "100%",
-                  height: "110px",
-                }}
-              >
-                <BrokenImageOutlined
-                  sx={{
-                    fill: "rgba(10, 10, 10, 0.2)",
-                  }}
-                  fontSize="large"
-                />
-                <Typography fontSize={"12px"} fontWeight={500}>
-                  Upload logo here
-                </Typography>
-                <input
-                  hidden
-                  accept="image/*"
-                  type="file"
-                  {...register("logo")}
-                />
-              </Box>
-            </>
-          )}
+              </>
+            )}
+            <input
+              hidden
+              accept="image/*"
+              type="file"
+              onChange={(e) => {
+                setImage(e.target.files[0]);
+              }}
+            />
+          </Box>
         </Stack>
       </Stack>
       <Stack

@@ -33,20 +33,32 @@ export const adminSlice = createSlice({
       state.isLoading = true;
     });
     builder.addCase(createOfferThunk.fulfilled, (state, action) => {
-      toast.success("offer added");
       state.isLoading = false;
     });
     builder.addCase(createOfferThunk.rejected, (state, action) => {
       state.isLoading = false;
-    });
-    builder.addCase(createPageThunk.fulfilled, (state, action) => {});
-    builder.addCase(createPageThunk.rejected, (state, action) => {
       toast.error(action.payload.msg.message);
     });
-    builder.addCase(createContactThunk.fulfilled, (state, action) => {
-      toast.success("contact added");
+    builder.addCase(createPageThunk.pending, (state) => {
+      state.isLoading = true;
     });
-    builder.addCase(createContactThunk.rejected, (state, action) => {});
+    builder.addCase(createPageThunk.fulfilled, (state, action) => {
+      state.isLoading = true;
+    });
+    builder.addCase(createPageThunk.rejected, (state, action) => {
+      toast.error(action.payload.msg.message);
+      state.isLoading = true;
+    });
+    builder.addCase(createContactThunk.pending, (state) => {
+      state.isLoading = true;
+    });
+    builder.addCase(createContactThunk.fulfilled, (state, action) => {
+      state.isLoading = false;
+    });
+    builder.addCase(createContactThunk.rejected, (state, action) => {
+      state.isLoading = false;
+      toast.error(action.payload.msg.message);
+    });
   },
 });
 

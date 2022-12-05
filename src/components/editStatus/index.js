@@ -43,9 +43,10 @@ export default function StatusDialog({
     setOrderStatus(event.target.value);
   };
   const options = [
-    { id: 1, status: "Completed" },
-    { id: 2, status: "Pending" },
-    { id: 3, status: "Rejected" },
+    { id: 1, status: "completed" },
+    { id: 2, status: "pending" },
+    { id: 3, status: "scheduled" },
+    { id: 4, status: "canceled" },
   ];
 
   return (
