@@ -9,6 +9,8 @@ import DialogActions from "@mui/material/DialogActions";
 import IconButton from "@mui/material/IconButton";
 import CloseIcon from "@mui/icons-material/Close";
 import Typography from "@mui/material/Typography";
+import { CustomButton } from "../../GlobalStyle";
+import { Stack } from "@mui/material";
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   "& .MuiDialogContent-root": {
@@ -49,9 +51,12 @@ BootstrapDialogTitle.propTypes = {
 };
 
 export default function CustomizedDialogs({ src, alt, open, setOpen }) {
-  console.log({ src });
   const handleClose = () => {
     setOpen(false);
+  };
+
+  const handleOpenImage = () => {
+    window.open(src);
   };
 
   return (
@@ -62,19 +67,47 @@ export default function CustomizedDialogs({ src, alt, open, setOpen }) {
     >
       <DialogContent>
         <img
-          width={"200px"}
+          width={"400px"}
           height={"300px"}
           style={{
-            objectFit: "cover",
+            objectFit: "contain",
           }}
           src={src}
           alt={alt}
         />
       </DialogContent>
       <DialogActions>
-        <Button autoFocus onClick={handleClose}>
-          close
-        </Button>
+        <Stack
+          spacing={2}
+          direction={"row"}
+          justifyContent="center"
+          width={"100%"}
+          id="Button"
+        >
+          <CustomButton
+            textcolor="#f4f4f4"
+            variant="contained"
+            sx={{
+              bgcolor: "#0E4C8F",
+            }}
+            width={"10%"}
+            onClick={handleOpenImage}
+          >
+            full
+          </CustomButton>
+          <CustomButton
+            border={"1px solid #0E4C8F"}
+            textcolor="#0E4C8F"
+            variant="contained"
+            sx={{
+              bgcolor: "#fff",
+            }}
+            width={"10%"}
+            onClick={handleClose}
+          >
+            close
+          </CustomButton>
+        </Stack>
       </DialogActions>
     </BootstrapDialog>
   );

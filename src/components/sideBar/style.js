@@ -24,6 +24,7 @@ const closedMixin = (theme) => ({
   width: `calc(${theme.spacing(7)} + 1px)`,
   [theme.breakpoints.up("sm")]: {
     width: `calc(${theme.spacing(8)} + 1px)`,
+    paddingTop: theme.spacing(8),
   },
   backgroundColor: "#1B1F23",
   color: "#fff",

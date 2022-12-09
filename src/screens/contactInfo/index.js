@@ -131,7 +131,6 @@ const ContactInfo = () => {
           open={confirmOpen}
           handleClose={handleClose}
           handleDelete={handleDelete}
-          id={IdTodelete}
         />
       </Stack>
 

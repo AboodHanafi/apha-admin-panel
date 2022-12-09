@@ -62,6 +62,7 @@ const NavBar = ({ open, handleDrawerOpen }) => {
               sx={{ bgcolor: deepOrange[500] }}
             />
             <KeyboardArrowDownIcon
+              onClick={handleClick}
               sx={{
                 fill: "#0A0A0A",
               }}

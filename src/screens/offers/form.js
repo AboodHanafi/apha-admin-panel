@@ -67,6 +67,7 @@ const OfferForm = () => {
       if (!params.id) {
         reset();
         setValueTo(format(new Date(), "yyyy-MM-dd"));
+        navigate("/offers");
         toast.success("offer added");
       } else {
         navigate("/offers");
@@ -132,7 +133,7 @@ const OfferForm = () => {
         flexWrap={"wrap"}
         gap={3}
       >
-        <Stack spacing={1} width={"49%"} id="title">
+        <Stack spacing={1} width={"45%"} minWidth="400px" id="title">
           <FormLabel
             sx={{
               color: "#0A0A0A",
@@ -150,7 +151,7 @@ const OfferForm = () => {
             {...register("title")}
           />
         </Stack>
-        <Stack spacing={1} width={"49%"} id="clinic">
+        <Stack spacing={1} width={"45%"} minWidth="400px" id="clinic">
           <FormLabel
             sx={{
               color: "#0A0A0A",
@@ -168,7 +169,7 @@ const OfferForm = () => {
             {...register("clinic")}
           />
         </Stack>
-        <Stack spacing={1} width={"49%"} id="price">
+        <Stack spacing={1} width={"45%"} minWidth="400px" id="price">
           <FormLabel
             sx={{
               color: "#0A0A0A",
@@ -186,7 +187,7 @@ const OfferForm = () => {
             {...register("price")}
           />
         </Stack>
-        <Stack spacing={1} width={"49%"} id="expiration-date">
+        <Stack spacing={1} width={"45%"} minWidth="400px" id="expiration-date">
           <FormLabel
             sx={{
               color: "#0A0A0A",

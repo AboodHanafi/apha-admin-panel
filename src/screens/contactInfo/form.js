@@ -53,6 +53,7 @@ const ContactForm = () => {
     if (createContactThunk.fulfilled.match(res)) {
       if (!params.id) {
         reset();
+        navigate("/contactinfo");
         toast.success("contact added");
       } else {
         navigate("/contactinfo");

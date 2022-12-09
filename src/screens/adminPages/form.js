@@ -45,6 +45,7 @@ const PagesForm = () => {
     if (createPageThunk.fulfilled.match(res)) {
       if (!params.id) {
         reset();
+        navigate("/pages");
         toast.success("page added");
       } else {
         toast.success("page edited");

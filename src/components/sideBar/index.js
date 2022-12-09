@@ -81,7 +81,7 @@ export const ExpandableSideBarItem = ({ openSide, item, navigate }) => {
 };
 export const SideBarItem = ({ openSide, menuItems, label, navigate }) => (
   <Stack>
-    <Typography
+    {/* <Typography
       sx={{
         opacity: openSide ? 1 : 0,
       }}
@@ -91,7 +91,7 @@ export const SideBarItem = ({ openSide, menuItems, label, navigate }) => (
       padding={"15px 20px 0"}
     >
       {label}
-    </Typography>
+    </Typography> */}
 
     {menuItems.map((item) => {
       return item.children ? (
@@ -142,6 +142,7 @@ const SideBar = ({ open }) => {
         }}
         alignItems={"center"}
         margin={"10px 0"}
+        padding="10px 0"
       >
         <img width={"92px"} height={"80px"} src={Images.logo} alt="logo" />
       </Stack>

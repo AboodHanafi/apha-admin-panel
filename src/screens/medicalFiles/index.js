@@ -6,6 +6,7 @@ import BasicTable from "../../components/table";
 import { getAdminDataThunk } from "../../redux/features/adminData/adminActions";
 import { Visibility } from "@mui/icons-material";
 import CustomizedDialogs from "../../components/popUp";
+import { CustomButton } from "../../GlobalStyle";
 
 const MedicalFiles = () => {
   const dispatch = useDispatch();
@@ -62,6 +63,8 @@ const MedicalFiles = () => {
       align: "center",
       headerAlign: "center",
       minWidth: 150,
+      renderCell: ({ row }) =>
+        row.insurance_number === null ? "___" : row.insurance_number,
     },
     {
       field: "image",
@@ -71,7 +74,11 @@ const MedicalFiles = () => {
       minWidth: 80,
       renderCell: ({ row }) => (
         <IconButton key={row.id} onClick={() => handleView(row.image)}>
-          <Visibility />
+          <Visibility
+            sx={{
+              fill: "rgba(60, 192, 185, 1)",
+            }}
+          />
         </IconButton>
       ),
     },
@@ -92,16 +99,35 @@ const MedicalFiles = () => {
     getData();
   }, []);
   return (
-    <Stack alignItems={"start"} width={"100%"} spacing={4}>
-      <Typography fontWeight={600} fontSize={"16px"} color={"#0A0A0A"}>
-        medical files
-      </Typography>
-      <CustomizedDialogs
-        src={image}
-        alt={image}
-        open={open}
-        setOpen={setOpen}
-      />
+    <Stack spacing={4}>
+      <Stack
+        direction={"row"}
+        alignItems={"center"}
+        justifyContent={"space-between"}
+        width={"100%"}
+      >
+        <Typography fontWeight={600} fontSize={"16px"} color={"#0A0A0A"}>
+          medical files
+        </Typography>
+        <CustomButton
+          CustomButton
+          textcolor="#f4f4f4"
+          variant="contained"
+          sx={{
+            bgcolor: "#0E4C8F",
+          }}
+          width={"15%"}
+          // onClick={() => navigate("/create-offer")}
+        >
+          open file
+        </CustomButton>
+        <CustomizedDialogs
+          src={image}
+          alt={image}
+          open={open}
+          setOpen={setOpen}
+        />
+      </Stack>
       <BasicTable columns={medicalFiles} rows={data} />
     </Stack>
   );

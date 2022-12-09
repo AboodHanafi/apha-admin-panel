@@ -6,7 +6,7 @@ import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import { Button, Divider } from "@mui/material";
 
-export default function ConfirmDialog({ open, handleClose, handleDelete, id }) {
+export default function ConfirmDialog({ open, handleClose, handleDelete }) {
   return (
     <Dialog
       open={open ? true : false}
@@ -21,7 +21,7 @@ export default function ConfirmDialog({ open, handleClose, handleDelete, id }) {
         fontWeight={600}
         id="alert-dialog-title"
       >
-        Confirm cancel
+        Confirm Delete
       </DialogTitle>
       <Divider />
       <DialogContent>
@@ -32,7 +32,7 @@ export default function ConfirmDialog({ open, handleClose, handleDelete, id }) {
           fontWeight={600}
           id="alert-dialog-description"
         >
-          Are you sure you want to cancel order number {id}?
+          Are you sure you want to delete?
         </DialogContentText>
       </DialogContent>
       <DialogActions>

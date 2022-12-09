@@ -54,5 +54,6 @@ export const CustomButton = styled(Button)`
   width: ${(props) => (props.width ? props.width : "100%")};
   :hover {
     box-shadow: none;
+    color: #fff;
   }
 `;

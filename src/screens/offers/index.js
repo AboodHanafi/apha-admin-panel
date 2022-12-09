@@ -181,7 +181,6 @@ const Offers = () => {
           open={confirmOpen}
           handleClose={handleClose}
           handleDelete={handleDelete}
-          id={IdTodelete}
         />
       </Stack>
       <BasicTable columns={offers} rows={data} />

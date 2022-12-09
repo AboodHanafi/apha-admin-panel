@@ -52,6 +52,7 @@ const Consultation = () => {
     },
     {
       field: "description",
+      headerName: "question",
       flex: 1,
       align: "center",
       headerAlign: "center",
