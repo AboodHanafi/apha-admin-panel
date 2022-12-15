@@ -94,3 +94,22 @@ export const createContactThunk = createAsyncThunk(
     }
   }
 );
+
+export const medicalFormThunk = createAsyncThunk(
+  "medicalForm",
+  async ({ url }, thunkApi) => {
+    try {
+      const { data } = await axios.get(url, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("userToken")}`,
+        },
+      });
+
+      return data;
+    } catch (e) {
+      return thunkApi.rejectWithValue({
+        msg: e.response.data,
+      });
+    }
+  }
+);

@@ -5,6 +5,7 @@ import {
   createOfferThunk,
   createPageThunk,
   getAdminDataThunk,
+  medicalFormThunk,
 } from "./adminActions";
 
 const initialState = {
@@ -59,6 +60,10 @@ export const adminSlice = createSlice({
       state.isLoading = false;
       toast.error(action.payload.msg.message);
     });
+    builder.addCase(medicalFormThunk.fulfilled, (state, action) => {
+      state.adminData = action.payload?.items;
+    });
+    builder.addCase(medicalFormThunk.rejected, (state, action) => {});
   },
 });
 

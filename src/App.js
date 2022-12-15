@@ -10,6 +10,7 @@ import ContactInfo from "./screens/contactInfo";
 import ContactForm from "./screens/contactInfo/form";
 import HomePage from "./screens/homePage";
 import MedicalFiles from "./screens/medicalFiles";
+import MedicalForm from "./screens/medicalFiles/form";
 import Offers from "./screens/offers";
 import OfferForm from "./screens/offers/form";
 import Orders from "./screens/orders";
@@ -60,6 +61,14 @@ function App() {
           element={
             <WithAuth>
               <MedicalFiles />
+            </WithAuth>
+          }
+        />
+        <Route
+          path="/medical-file/:id"
+          element={
+            <WithAuth>
+              <MedicalForm />
             </WithAuth>
           }
         />
