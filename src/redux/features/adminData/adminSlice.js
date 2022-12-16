@@ -6,6 +6,7 @@ import {
   createPageThunk,
   getAdminDataThunk,
   medicalFormThunk,
+  updateMedicalFile,
 } from "./adminActions";
 
 const initialState = {
@@ -64,6 +65,8 @@ export const adminSlice = createSlice({
       state.adminData = action.payload?.items;
     });
     builder.addCase(medicalFormThunk.rejected, (state, action) => {});
+    builder.addCase(updateMedicalFile.fulfilled, (state, action) => {});
+    builder.addCase(updateMedicalFile.rejected, (state, action) => {});
   },
 });
 

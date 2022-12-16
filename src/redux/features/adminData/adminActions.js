@@ -113,3 +113,23 @@ export const medicalFormThunk = createAsyncThunk(
     }
   }
 );
+
+export const updateMedicalFile = createAsyncThunk(
+  "update/medical",
+  async ({ url, filteredData }, thunkApi) => {
+    try {
+      const { data } = await axios.post(url, filteredData, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("userToken")}`,
+          "X-HTTP-Method-Override": "put",
+        },
+      });
+
+      return data;
+    } catch (e) {
+      return thunkApi.rejectWithValue({
+        msg: e.response.data,
+      });
+    }
+  }
+);

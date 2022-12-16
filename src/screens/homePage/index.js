@@ -1,4 +1,5 @@
 import { Stack, Typography } from "@mui/material";
+import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import CRUDRequsests from "../../apis";
@@ -26,9 +27,37 @@ const HomePage = () => {
     });
     setPatientData(resp.data.items);
   };
+  const getCompaniesList = async () => {
+    const resp = await axios.get("http://aiph.me:8000/api/clinic/compList");
+    sessionStorage.setItem(
+      "companiesList",
+      JSON.stringify(resp.data.companies)
+    );
+  };
+  const getNationalitiesList = async () => {
+    const resp = await axios.get("http://aiph.me:8000/api/clinic/natList");
+    sessionStorage.setItem(
+      "nationalitiesList",
+      JSON.stringify(resp.data.nationalities)
+    );
+  };
+  const getUsersList = async () => {
+    const resp = await axios.get("http://aiph.me:8000/api/clinic/usersList");
+    sessionStorage.setItem("usersList", JSON.stringify(resp.data.users));
+  };
+
+  const getIdTypeList = async () => {
+    const resp = await axios.get("http://aiph.me:8000/api/clinic/idTypesList");
+    sessionStorage.setItem("IdTypeList", JSON.stringify(resp.data.idTypes));
+  };
+
   useEffect(() => {
     getData();
     getpatientData();
+    getCompaniesList();
+    getNationalitiesList();
+    getUsersList();
+    getIdTypeList();
   }, []);
   return (
     <Stack flexWrap={"wrap"} gap={4} direction={"row"}>

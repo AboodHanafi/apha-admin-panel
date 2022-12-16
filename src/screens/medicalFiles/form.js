@@ -1,18 +1,29 @@
 import { yupResolver } from "@hookform/resolvers/yup";
-import { Button, FormLabel, Stack } from "@mui/material";
+import {
+  Autocomplete,
+  Box,
+  Button,
+  FormLabel,
+  Stack,
+  Typography,
+} from "@mui/material";
 import { useForm } from "react-hook-form";
 import * as yup from "yup";
 import { CustomButton, CustomizedTextField } from "../../GlobalStyle";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
+  createOfferThunk,
   createPageThunk,
   getAdminDataThunk,
   medicalFormThunk,
+  updateMedicalFile,
 } from "../../redux/features/adminData/adminActions";
 import { useNavigate, useParams } from "react-router-dom";
+import { BrokenImageOutlined } from "@mui/icons-material";
 const schema = yup.object({
+  request_type: yup.string().required(),
   Fname_ar: yup.string().required(),
   Pname_ar: yup.string().required(),
   Gname_ar: yup.string().required(),
@@ -22,17 +33,28 @@ const schema = yup.object({
   Gname_en: yup.string().required(),
   Lname_en: yup.string().required(),
   identity_number: yup.string().required(),
+  IdType: yup.string().required(),
+  nationality: yup.string().required(),
   mobile: yup.string().required(),
   email: yup.string(),
+  company: yup.string().required(),
   insurance_no: yup.string().required(),
   pay_date: yup.string(),
   insurance_end_date: yup.string().required(),
+  gender: yup.string().required(),
   DOB: yup.string().required(),
+  request_status: yup.string().required(),
+  approved_by: yup.string().required(),
   created_at: yup.string().required(),
   updated_at: yup.string().required(),
 });
 
 const MedicalForm = () => {
+  const [Image, setImage] = useState("");
+  const [initImage, setInitImage] = useState("");
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const params = useParams();
   const {
     register,
     handleSubmit,
@@ -42,10 +64,38 @@ const MedicalForm = () => {
   } = useForm({
     resolver: yupResolver(schema),
   });
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
-  const params = useParams();
-  // const data = useSelector((state) => state.adminData.adminData);
+
+  const gender = [
+    { code: "0", name: "other" },
+    { code: "1", name: "male" },
+    { code: "2", name: "female" },
+  ];
+  const requestStatus = [
+    { code: "0", name: "pending" },
+    { code: "1", name: "new" },
+    { code: "2", name: "completed" },
+  ];
+
+  const requestTypes = [
+    { code: "1", name: "Master" },
+    { code: "2", name: "Modify" },
+  ];
+
+  function covertToFormData(data) {
+    const formData = new FormData();
+    formData.append("Fname_ar", data.Fname_ar);
+    formData.append("Pname_ar", data.Pname_ar);
+    formData.append("Gname_ar", data.Gname_ar);
+    formData.append("Lname_ar", data.Lname_ar);
+    formData.append("Fname_en", data.Fname_en);
+    formData.append("Pname_en", data.Pname_en);
+    formData.append("Gname_en", data.Gname_en);
+    formData.append("Lname_en", data.Lname_en);
+    if (Image) formData.append("image", Image);
+
+    return formData;
+  }
+
   const getUserData = async () => {
     const response = await dispatch(
       medicalFormThunk({
@@ -54,6 +104,38 @@ const MedicalForm = () => {
     );
     const data = response.payload.items;
     if (medicalFormThunk.fulfilled.match(response)) {
+      const requestTypes1 = requestTypes.filter((item) => {
+        return item.code === data[0].request_type;
+      });
+      const nationality1 = JSON.parse(
+        sessionStorage.getItem("nationalitiesList")
+      ).filter((item) => {
+        return item.natCode === data[0].nationality;
+      });
+
+      const IdType1 = JSON.parse(sessionStorage.getItem("IdTypeList")).filter(
+        (item) => {
+          return item.idTypeCode === data[0].id_type;
+        }
+      );
+      const company1 = JSON.parse(
+        sessionStorage.getItem("companiesList")
+      ).filter((item) => {
+        return item.compCode === data[0].insurance_company;
+      });
+      const gender1 = gender.filter((item) => {
+        return item.code === data[0].gender;
+      });
+
+      const requestStatus1 = requestStatus.filter((item) => {
+        return item.code === data[0].request_status;
+      });
+      const approved_by1 = JSON.parse(
+        sessionStorage.getItem("usersList")
+      ).filter((item) => {
+        return item.userId === data[0].approved_by;
+      });
+      setValue("request_type", requestTypes1[0].name);
       setValue("Fname_ar", data[0].Fname_ar);
       setValue("Pname_ar", data[0].Pname_ar);
       setValue("Gname_ar", data[0].Gname_ar);
@@ -71,11 +153,36 @@ const MedicalForm = () => {
       setValue("DOB", data[0].DOB);
       setValue("created_at", data[0].created_at);
       setValue("updated_at", data[0].updated_at);
+      setValue("nationality", nationality1[0].natName);
+      setValue("IdType", IdType1[0].idTypeName);
+      setValue("company", company1[0].compName);
+      setValue("gender", gender1[0].name);
+      setValue("request_status", requestStatus1[0].name);
+      setValue("approved_by", approved_by1[0].userName);
+      setInitImage(data[0].image);
     }
   };
   useEffect(() => {
     getUserData();
   }, []);
+  const onSubmit = (data) => {
+    const filteredData = covertToFormData(data);
+    const res = dispatch(
+      updateMedicalFile({
+        url: `https://jihadm33.sg-host.com/public/api/dashboard/file/${params.id}`,
+        filteredData,
+      })
+    );
+    if (updateMedicalFile.fulfilled.match(res)) {
+      getUserData();
+    }
+    // const code = JSON.parse(sessionStorage.getItem("usersList")).filter(
+    //   (item) => {
+    //     return item.userName === data.approved_by;
+    //   }
+    // );
+    // console.log("code", code[0].userId);
+  };
 
   return (
     <Stack
@@ -85,8 +192,60 @@ const MedicalForm = () => {
       alignItems={"center"}
       spacing={2}
       component={"form"}
-      // onSubmit={handleSubmit(onSubmit)}
+      onSubmit={handleSubmit(onSubmit)}
     >
+      <Stack
+        width={"100%"}
+        direction={"row"}
+        justifyContent={"start"}
+        flexWrap={"wrap"}
+        gap={3}
+      >
+        <Stack spacing={1} width={"20%"} minWidth="250px" id="title">
+          <FormLabel
+            sx={{
+              color: "#0A0A0A",
+              fontSize: "16px",
+              fontWeight: 600,
+            }}
+          >
+            file type
+          </FormLabel>
+          <Autocomplete
+            disablePortal
+            id="combo-box-demo"
+            options={requestTypes}
+            getOptionLabel={(option) => option.name}
+            renderInput={(params) => (
+              <CustomizedTextField
+                placeholder="Select Type"
+                {...params}
+                inputProps={{
+                  ...params.inputProps,
+                }}
+                {...register("request_type")}
+              />
+            )}
+          />
+        </Stack>
+        {/* <Stack spacing={1} width={"20%"} minWidth="250px" id="clinic">
+          <FormLabel
+            sx={{
+              color: "#0A0A0A",
+              fontSize: "16px",
+              fontWeight: 600,
+            }}
+          >
+            parent name
+          </FormLabel>
+          <CustomizedTextField
+            type={"text"}
+            placeholder={"parent name"}
+            variant="outlined"
+            {...register("Pname_ar")}
+          />
+        </Stack> */}
+      </Stack>
       <Stack
         width={"100%"}
         direction={"row"}
@@ -254,6 +413,60 @@ const MedicalForm = () => {
               fontWeight: 600,
             }}
           >
+            nationality
+          </FormLabel>
+          <Autocomplete
+            disablePortal
+            id="combo-box-demo"
+            options={JSON.parse(sessionStorage.getItem("nationalitiesList"))}
+            getOptionLabel={(option) => option.natName}
+            renderInput={(params) => (
+              <CustomizedTextField
+                placeholder="Select Type"
+                {...params}
+                inputProps={{
+                  ...params.inputProps,
+                }}
+                {...register("nationality")}
+              />
+            )}
+          />
+        </Stack>
+        <Stack spacing={1} width={"20%"} minWidth="250px" id="title">
+          <FormLabel
+            sx={{
+              color: "#0A0A0A",
+              fontSize: "16px",
+              fontWeight: 600,
+            }}
+          >
+            Id Type
+          </FormLabel>
+          <Autocomplete
+            disablePortal
+            id="combo-box-demo"
+            options={JSON.parse(sessionStorage.getItem("IdTypeList"))}
+            getOptionLabel={(option) => option.idTypeName}
+            renderInput={(params) => (
+              <CustomizedTextField
+                placeholder="Select Type"
+                {...params}
+                inputProps={{
+                  ...params.inputProps,
+                }}
+                {...register("IdType")}
+              />
+            )}
+          />
+        </Stack>
+        <Stack spacing={1} width={"20%"} minWidth="250px" id="title">
+          <FormLabel
+            sx={{
+              color: "#0A0A0A",
+              fontSize: "16px",
+              fontWeight: 600,
+            }}
+          >
             identity number
           </FormLabel>
           <CustomizedTextField
@@ -305,6 +518,33 @@ const MedicalForm = () => {
         flexWrap={"wrap"}
         gap={3}
       >
+        <Stack spacing={1} width={"20%"} minWidth="250px" id="title">
+          <FormLabel
+            sx={{
+              color: "#0A0A0A",
+              fontSize: "16px",
+              fontWeight: 600,
+            }}
+          >
+            company
+          </FormLabel>
+          <Autocomplete
+            disablePortal
+            id="combo-box-demo"
+            options={JSON.parse(sessionStorage.getItem("companiesList"))}
+            getOptionLabel={(option) => option.compName}
+            renderInput={(params) => (
+              <CustomizedTextField
+                placeholder="Select Type"
+                {...params}
+                inputProps={{
+                  ...params.inputProps,
+                }}
+                {...register("company")}
+              />
+            )}
+          />
+        </Stack>
         <Stack spacing={1} width={"20%"} minWidth="250px" id="title">
           <FormLabel
             sx={{
@@ -374,6 +614,33 @@ const MedicalForm = () => {
             {...register("insurance_end_date")}
           />
         </Stack>
+        <Stack spacing={1} width={"20%"} minWidth="250px" id="price">
+          <FormLabel
+            sx={{
+              color: "#0A0A0A",
+              fontSize: "16px",
+              fontWeight: 600,
+            }}
+          >
+            gender
+          </FormLabel>
+          <Autocomplete
+            disablePortal
+            id="combo-box-demo"
+            options={gender}
+            getOptionLabel={(option) => option.name}
+            renderInput={(params) => (
+              <CustomizedTextField
+                placeholder="Select Type"
+                {...params}
+                inputProps={{
+                  ...params.inputProps,
+                }}
+                {...register("gender")}
+              />
+            )}
+          />
+        </Stack>
       </Stack>
       <Stack
         width={"100%"}
@@ -390,7 +657,61 @@ const MedicalForm = () => {
               fontWeight: 600,
             }}
           >
-            requet date
+            request status
+          </FormLabel>
+          <Autocomplete
+            disablePortal
+            id="combo-box-demo"
+            options={requestStatus}
+            getOptionLabel={(option) => option.name}
+            renderInput={(params) => (
+              <CustomizedTextField
+                placeholder="Select Type"
+                {...params}
+                inputProps={{
+                  ...params.inputProps,
+                }}
+                {...register("request_status")}
+              />
+            )}
+          />
+        </Stack>
+        <Stack spacing={1} width={"20%"} minWidth="250px" id="title">
+          <FormLabel
+            sx={{
+              color: "#0A0A0A",
+              fontSize: "16px",
+              fontWeight: 600,
+            }}
+          >
+            approved by
+          </FormLabel>
+          <Autocomplete
+            disablePortal
+            id="combo-box-demo"
+            options={JSON.parse(sessionStorage.getItem("usersList"))}
+            getOptionLabel={(option) => option.userName}
+            renderInput={(params) => (
+              <CustomizedTextField
+                placeholder="Select Type"
+                {...params}
+                inputProps={{
+                  ...params.inputProps,
+                }}
+                {...register("approved_by")}
+              />
+            )}
+          />
+        </Stack>
+        <Stack spacing={1} width={"20%"} minWidth="250px" id="title">
+          <FormLabel
+            sx={{
+              color: "#0A0A0A",
+              fontSize: "16px",
+              fontWeight: 600,
+            }}
+          >
+            request date
           </FormLabel>
           <CustomizedTextField
             type={"text"}
@@ -417,6 +738,54 @@ const MedicalForm = () => {
           />
         </Stack>
       </Stack>
+      <Box
+        component={"label"}
+        justifyContent={"center"}
+        alignItems="center"
+        sx={{
+          display: "flex",
+          bgcolor: "#fff",
+          flexDirection: "column",
+          cursor: "pointer",
+          border: "1px dashed rgba(10, 10, 10, 0.2)",
+          borderRadius: "4px",
+          width: "50%",
+          height: "300px",
+        }}
+      >
+        {Image || initImage ? (
+          <img
+            width={"100%"}
+            height="100%"
+            style={{
+              objectFit: "contain",
+            }}
+            src={Image ? URL.createObjectURL(Image) : initImage}
+            alt=""
+          />
+        ) : (
+          <>
+            <BrokenImageOutlined
+              sx={{
+                fill: "rgba(10, 10, 10, 0.2)",
+              }}
+              fontSize="large"
+            />
+            <Typography fontSize={"12px"} fontWeight={500}>
+              Upload logo here
+            </Typography>
+          </>
+        )}
+        <input
+          hidden
+          accept="image/*"
+          type="file"
+          onChange={(e) => {
+            setImage(e.target.files[0]);
+          }}
+        />
+      </Box>
+      <Button type="submit">submit</Button>
     </Stack>
   );
 };

@@ -99,6 +99,19 @@ const MedicalFiles = () => {
       align: "center",
       headerAlign: "center",
       minWidth: 150,
+      renderCell: ({ value }) => {
+        const approvedBy = JSON.parse(
+          sessionStorage.getItem("usersList")
+        ).filter((item) => {
+          return item.userId === value;
+        });
+
+        if (approvedBy.length === 0) {
+          return value;
+        } else {
+          return approvedBy[0].userName;
+        }
+      },
     },
     {
       field: "details",
