@@ -22,8 +22,10 @@ import {
 } from "../../redux/features/adminData/adminActions";
 import { useNavigate, useParams } from "react-router-dom";
 import { BrokenImageOutlined } from "@mui/icons-material";
+import axios from "axios";
 const schema = yup.object({
   request_type: yup.string().required(),
+  masterCode: yup.string().required(),
   Fname_ar: yup.string().required(),
   Pname_ar: yup.string().required(),
   Gname_ar: yup.string().required(),
@@ -52,6 +54,14 @@ const schema = yup.object({
 const MedicalForm = () => {
   const [Image, setImage] = useState("");
   const [initImage, setInitImage] = useState("");
+  const [requestType, setRequestType] = useState();
+  const [nationality, setNationality] = useState();
+  const [companiesList, setCompaniesList] = useState();
+  const [IdTypes, setIdTypes] = useState();
+  const [genderType, setGenderType] = useState();
+  const [requestStatusState, setRequestStatus] = useState();
+  const [approvedBy, setApprovedBy] = useState();
+  const [loading, setLoading] = useState(false);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const params = useParams();
@@ -92,50 +102,33 @@ const MedicalForm = () => {
     formData.append("Gname_en", data.Gname_en);
     formData.append("Lname_en", data.Lname_en);
     if (Image) formData.append("image", Image);
-
     return formData;
   }
-
+  const getPatientEligibility = async (patientID) => {
+    const response = await axios.get(
+      `http://aiph.me:8000/api/patient/PtElg?patientId=${patientID}`
+    );
+    return response.data.mastPtCode;
+  };
   const getUserData = async () => {
+    setLoading(true);
     const response = await dispatch(
       medicalFormThunk({
         url: `https://jihadm33.sg-host.com/public/api/dashboard/FileDetails/${params.id}`,
       })
     );
     const data = response.payload.items;
+    console.log("1111111 ", { data });
     if (medicalFormThunk.fulfilled.match(response)) {
-      const requestTypes1 = requestTypes.filter((item) => {
-        return item.code === data[0].request_type;
-      });
-      const nationality1 = JSON.parse(
-        sessionStorage.getItem("nationalitiesList")
-      ).filter((item) => {
-        return item.natCode === data[0].nationality;
-      });
+      const masterCode = getPatientEligibility(data[0].identity_number);
+      masterCode.then((value) => setValue("masterCode", value));
 
-      const IdType1 = JSON.parse(sessionStorage.getItem("IdTypeList")).filter(
-        (item) => {
-          return item.idTypeCode === data[0].id_type;
-        }
-      );
-      const company1 = JSON.parse(
-        sessionStorage.getItem("companiesList")
-      ).filter((item) => {
-        return item.compCode === data[0].insurance_company;
-      });
-      const gender1 = gender.filter((item) => {
-        return item.code === data[0].gender;
-      });
+      // const IdType1 = JSON.parse(sessionStorage.getItem("IdTypeList")).filter(
+      //   (item) => {
+      //     return item.idTypeCode === data[0].id_type;
+      //   }
+      // );
 
-      const requestStatus1 = requestStatus.filter((item) => {
-        return item.code === data[0].request_status;
-      });
-      const approved_by1 = JSON.parse(
-        sessionStorage.getItem("usersList")
-      ).filter((item) => {
-        return item.userId === data[0].approved_by;
-      });
-      setValue("request_type", requestTypes1[0].name);
       setValue("Fname_ar", data[0].Fname_ar);
       setValue("Pname_ar", data[0].Pname_ar);
       setValue("Gname_ar", data[0].Gname_ar);
@@ -153,36 +146,61 @@ const MedicalForm = () => {
       setValue("DOB", data[0].DOB);
       setValue("created_at", data[0].created_at);
       setValue("updated_at", data[0].updated_at);
-      setValue("nationality", nationality1[0].natName);
-      setValue("IdType", IdType1[0].idTypeName);
-      setValue("company", company1[0].compName);
-      setValue("gender", gender1[0].name);
-      setValue("request_status", requestStatus1[0].name);
-      setValue("approved_by", approved_by1[0].userName);
       setInitImage(data[0].image);
+      setRequestType(
+        requestTypes.find((element) => element.code === data[0].request_type)
+      );
+      setNationality(
+        JSON.parse(sessionStorage.getItem("nationalitiesList")).find(
+          (element) => element.natCode === data[0].nationality
+        )
+      );
+      setCompaniesList(
+        JSON.parse(sessionStorage.getItem("companiesList")).find(
+          (element) => element.compCode === data[0].insurance_company
+        )
+      );
+      setIdTypes(
+        JSON.parse(sessionStorage.getItem("IdTypeList")).find(
+          (element) => element.idTypeCode === data[0].id_type
+        )
+      );
+      setGenderType(gender.find((element) => element.code === data[0].gender));
+      setRequestStatus(
+        requestStatus.find((element) => element.code === data[0].request_status)
+      );
+      setApprovedBy(
+        JSON.parse(sessionStorage.getItem("usersList")).find(
+          (element) => element.userId === data[0].approved_by
+        )
+      );
+      setLoading(false);
     }
   };
+
   useEffect(() => {
     getUserData();
   }, []);
-  const onSubmit = (data) => {
+  const onSubmit = async (data) => {
     const filteredData = covertToFormData(data);
-    const res = dispatch(
+
+    const res = await dispatch(
       updateMedicalFile({
         url: `https://jihadm33.sg-host.com/public/api/dashboard/file/${params.id}`,
         filteredData,
       })
     );
     if (updateMedicalFile.fulfilled.match(res)) {
-      getUserData();
+      navigate("/medical-files");
     }
     // const code = JSON.parse(sessionStorage.getItem("usersList")).filter(
     //   (item) => {
     //     return item.userName === data.approved_by;
     //   }
     // );
-    // console.log("code", code[0].userId);
   };
+
+  if (loading) return <h1>loading...</h1>;
 
   return (
     <Stack
@@ -216,6 +234,8 @@ const MedicalForm = () => {
             id="combo-box-demo"
             options={requestTypes}
             getOptionLabel={(option) => option.name}
+            value={requestType}
+            onChange={(e, value) => setRequestType(value)}
             renderInput={(params) => (
               <CustomizedTextField
                 placeholder="Select Type"
@@ -223,12 +243,11 @@ const MedicalForm = () => {
                 inputProps={{
                   ...params.inputProps,
                 }}
-                {...register("request_type")}
               />
             )}
           />
         </Stack>
-        {/* <Stack spacing={1} width={"20%"} minWidth="250px" id="clinic">
+        <Stack spacing={1} width={"20%"} minWidth="250px" id="clinic">
           <FormLabel
             sx={{
               color: "#0A0A0A",
@@ -236,15 +255,15 @@ const MedicalForm = () => {
               fontWeight: 600,
             }}
           >
-            parent name
+            master code
           </FormLabel>
           <CustomizedTextField
             type={"text"}
-            placeholder={"parent name"}
+            placeholder={"master code"}
             variant="outlined"
-            {...register("Pname_ar")}
+            {...register("masterCode")}
           />
-        </Stack> */}
+        </Stack>
       </Stack>
       <Stack
         width={"100%"}
@@ -420,6 +439,8 @@ const MedicalForm = () => {
             id="combo-box-demo"
             options={JSON.parse(sessionStorage.getItem("nationalitiesList"))}
             getOptionLabel={(option) => option.natName}
+            value={nationality}
+            onChange={(e, value) => setNationality(value)}
             renderInput={(params) => (
               <CustomizedTextField
                 placeholder="Select Type"
@@ -427,7 +448,7 @@ const MedicalForm = () => {
                 inputProps={{
                   ...params.inputProps,
                 }}
-                {...register("nationality")}
+                // {...register("nationality")}
               />
             )}
           />
@@ -447,6 +468,8 @@ const MedicalForm = () => {
             id="combo-box-demo"
             options={JSON.parse(sessionStorage.getItem("IdTypeList"))}
             getOptionLabel={(option) => option.idTypeName}
+            value={IdTypes}
+            onChange={(e, value) => setIdTypes(value)}
             renderInput={(params) => (
               <CustomizedTextField
                 placeholder="Select Type"
@@ -533,6 +556,8 @@ const MedicalForm = () => {
             id="combo-box-demo"
             options={JSON.parse(sessionStorage.getItem("companiesList"))}
             getOptionLabel={(option) => option.compName}
+            value={companiesList}
+            onChange={(e, value) => setCompaniesList(value)}
             renderInput={(params) => (
               <CustomizedTextField
                 placeholder="Select Type"
@@ -540,7 +565,6 @@ const MedicalForm = () => {
                 inputProps={{
                   ...params.inputProps,
                 }}
-                {...register("company")}
               />
             )}
           />
@@ -629,6 +653,8 @@ const MedicalForm = () => {
             id="combo-box-demo"
             options={gender}
             getOptionLabel={(option) => option.name}
+            value={genderType}
+            onChange={(e, value) => setGenderType(value)}
             renderInput={(params) => (
               <CustomizedTextField
                 placeholder="Select Type"
@@ -664,6 +690,8 @@ const MedicalForm = () => {
             id="combo-box-demo"
             options={requestStatus}
             getOptionLabel={(option) => option.name}
+            value={requestStatusState}
+            onChange={(e, value) => setRequestStatus(value)}
             renderInput={(params) => (
               <CustomizedTextField
                 placeholder="Select Type"
@@ -671,7 +699,6 @@ const MedicalForm = () => {
                 inputProps={{
                   ...params.inputProps,
                 }}
-                {...register("request_status")}
               />
             )}
           />
@@ -691,6 +718,8 @@ const MedicalForm = () => {
             id="combo-box-demo"
             options={JSON.parse(sessionStorage.getItem("usersList"))}
             getOptionLabel={(option) => option.userName}
+            value={approvedBy}
+            onChange={(e, value) => setApprovedBy(value)}
             renderInput={(params) => (
               <CustomizedTextField
                 placeholder="Select Type"
@@ -698,7 +727,6 @@ const MedicalForm = () => {
                 inputProps={{
                   ...params.inputProps,
                 }}
-                {...register("approved_by")}
               />
             )}
           />
