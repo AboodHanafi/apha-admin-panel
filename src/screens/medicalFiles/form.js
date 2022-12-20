@@ -3,6 +3,7 @@ import {
   Autocomplete,
   Box,
   Button,
+  CircularProgress,
   FormLabel,
   Stack,
   Typography,
@@ -24,7 +25,6 @@ import { useNavigate, useParams } from "react-router-dom";
 import { BrokenImageOutlined } from "@mui/icons-material";
 import axios from "axios";
 const schema = yup.object({
-  request_type: yup.string().required(),
   masterCode: yup.string().required(),
   Fname_ar: yup.string().required(),
   Pname_ar: yup.string().required(),
@@ -35,24 +35,20 @@ const schema = yup.object({
   Gname_en: yup.string().required(),
   Lname_en: yup.string().required(),
   identity_number: yup.string().required(),
-  IdType: yup.string().required(),
-  nationality: yup.string().required(),
   mobile: yup.string().required(),
   email: yup.string(),
-  company: yup.string().required(),
   insurance_no: yup.string().required(),
   pay_date: yup.string(),
   insurance_end_date: yup.string().required(),
-  gender: yup.string().required(),
   DOB: yup.string().required(),
-  request_status: yup.string().required(),
-  approved_by: yup.string().required(),
   created_at: yup.string().required(),
   updated_at: yup.string().required(),
 });
 
 const MedicalForm = () => {
+  const [submitType, setSubmitType] = useState();
   const [Image, setImage] = useState("");
+  const [base64Image, setBase64Image] = useState("");
   const [initImage, setInitImage] = useState("");
   const [requestType, setRequestType] = useState();
   const [nationality, setNationality] = useState();
@@ -61,6 +57,8 @@ const MedicalForm = () => {
   const [genderType, setGenderType] = useState();
   const [requestStatusState, setRequestStatus] = useState();
   const [approvedBy, setApprovedBy] = useState();
+  const [PoliciesList, setPoliciesList] = useState();
+  const [policy, setPolicy] = useState();
   const [loading, setLoading] = useState(false);
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -91,8 +89,10 @@ const MedicalForm = () => {
     { code: "2", name: "Modify" },
   ];
 
-  function covertToFormData(data) {
+  function updateFormData(data) {
     const formData = new FormData();
+    formData.append("request_type", requestType.code);
+    formData.append("Fname_ar", data.Fname_ar);
     formData.append("Fname_ar", data.Fname_ar);
     formData.append("Pname_ar", data.Pname_ar);
     formData.append("Gname_ar", data.Gname_ar);
@@ -101,7 +101,67 @@ const MedicalForm = () => {
     formData.append("Pname_en", data.Pname_en);
     formData.append("Gname_en", data.Gname_en);
     formData.append("Lname_en", data.Lname_en);
+    formData.append("nationality", nationality.natCode);
+    formData.append("id_type", IdTypes.idTypeCode);
+    formData.append("gender", genderType.code);
+    formData.append("identity_number", data.identity_number);
+    formData.append("email", data.email);
+    formData.append("mobile", data.mobile);
+    formData.append("insurance_company", companiesList.compCode);
+    if (requestType.code === 1)
+      formData.append("insurance_no", data.insurance_no);
+    formData.append("DOB", data.DOB);
+    formData.append("insurance_end_date", data.insurance_end_date);
+    formData.append("request_status", requestStatusState.code);
+    formData.append("DOB", data.DOB);
+    formData.append("approved_by", approvedBy.userId);
+    formData.append("created_at", data.created_at);
+    formData.append("updated_at", data.updated_at);
+    formData.append("policy_id", policy.policyCode);
     if (Image) formData.append("image", Image);
+    return formData;
+  }
+  function addFormData(data) {
+    const reader = new FileReader();
+    reader.readAsDataURL(Image);
+    reader.onload = () => {
+      const base64Ready = reader.result.split(",")[1];
+
+      setBase64Image(base64Ready);
+    };
+    reader.onerror = (error) => {
+      console.log("Error: ", error);
+    };
+    const formData = new FormData();
+    // formData.append("mastPtCode", data.masterCode);
+    formData.append("policyCode", policy.policyCode);
+    formData.append("idImg", base64Image);
+    // formData.append("Fname_ar", data.Fname_ar);
+    // formData.append("Fname_ar", data.Fname_ar);
+    // formData.append("Pname_ar", data.Pname_ar);
+    // formData.append("Gname_ar", data.Gname_ar);
+    // formData.append("Lname_ar", data.Lname_ar);
+    // formData.append("Fname_en", data.Fname_en);
+    // formData.append("Pname_en", data.Pname_en);
+    // formData.append("Gname_en", data.Gname_en);
+    // formData.append("Lname_en", data.Lname_en);
+    // formData.append("nationality", nationality.natCode);
+    // formData.append("id_type", IdTypes.idTypeCode);
+    // formData.append("gender", genderType.code);
+    // formData.append("identity_number", data.identity_number);
+    // formData.append("email", data.email);
+    // formData.append("mobile", data.mobile);
+    // formData.append("insurance_company", companiesList.compCode);
+    // if (requestType.code === 1)
+    //   formData.append("insurance_no", data.insurance_no);
+    // formData.append("DOB", data.DOB);
+    // formData.append("insurance_end_date", data.insurance_end_date);
+    // formData.append("request_status", requestStatusState.code);
+    // formData.append("DOB", data.DOB);
+    // formData.append("approved_by", approvedBy.userId);
+    // formData.append("created_at", data.created_at);
+    // formData.append("updated_at", data.updated_at);
+    // formData.append("policy_id", policy.policyCode);
     return formData;
   }
   const getPatientEligibility = async (patientID) => {
@@ -110,6 +170,13 @@ const MedicalForm = () => {
     );
     return response.data.mastPtCode;
   };
+  const getPoliciesList = async (compCode) => {
+    const response = await axios.get(
+      `http://aiph.me:8000/api/clinic/polcyList?compCode=${compCode}`
+    );
+    return response.data;
+  };
+
   const getUserData = async () => {
     setLoading(true);
     const response = await dispatch(
@@ -118,17 +185,18 @@ const MedicalForm = () => {
       })
     );
     const data = response.payload.items;
-    console.log("1111111 ", { data });
     if (medicalFormThunk.fulfilled.match(response)) {
+      const policyAuto = getPoliciesList(data[0].insurance_company);
+      policyAuto.then((value) => {
+        setPoliciesList(value.policies);
+        setPolicy(
+          value.policies.find(
+            (element) => element.policyCode === data[0].policy_id
+          )
+        );
+      });
       const masterCode = getPatientEligibility(data[0].identity_number);
       masterCode.then((value) => setValue("masterCode", value));
-
-      // const IdType1 = JSON.parse(sessionStorage.getItem("IdTypeList")).filter(
-      //   (item) => {
-      //     return item.idTypeCode === data[0].id_type;
-      //   }
-      // );
-
       setValue("Fname_ar", data[0].Fname_ar);
       setValue("Pname_ar", data[0].Pname_ar);
       setValue("Gname_ar", data[0].Gname_ar);
@@ -174,34 +242,44 @@ const MedicalForm = () => {
           (element) => element.userId === data[0].approved_by
         )
       );
-      setLoading(false);
+      if (PoliciesList) {
+      }
     }
+    setLoading(false);
   };
 
   useEffect(() => {
     getUserData();
   }, []);
   const onSubmit = async (data) => {
-    const filteredData = covertToFormData(data);
+    switch (submitType) {
+      case 1:
+        {
+          const filteredData = updateFormData(data);
+          const res = await dispatch(
+            updateMedicalFile({
+              url: `https://jihadm33.sg-host.com/public/api/dashboard/file/${params.id}`,
+              filteredData,
+            })
+          );
+          if (updateMedicalFile.fulfilled.match(res)) {
+            navigate("/medical-files");
+          }
+        }
+        break;
+      case 2:
+        const filteredData = addFormData(data);
+        const resp = axios.post(
+          "http://aiph.me:8000/api/clinic/addNewPt/",
+          filteredData
+        );
 
-    const res = await dispatch(
-      updateMedicalFile({
-        url: `https://jihadm33.sg-host.com/public/api/dashboard/file/${params.id}`,
-        filteredData,
-      })
-    );
-    if (updateMedicalFile.fulfilled.match(res)) {
-      navigate("/medical-files");
+        break;
+      default:
     }
-    // const code = JSON.parse(sessionStorage.getItem("usersList")).filter(
-    //   (item) => {
-    //     return item.userName === data.approved_by;
-    //   }
-    // );
   };
 
-  if (loading) return <h1>loading...</h1>;
-
+  if (loading) return <CircularProgress />;
   return (
     <Stack
       sx={{
@@ -260,6 +338,7 @@ const MedicalForm = () => {
           <CustomizedTextField
             type={"text"}
             placeholder={"master code"}
+            disabled={requestType?.code === "2" ? true : false}
             variant="outlined"
             {...register("masterCode")}
           />
@@ -577,6 +656,39 @@ const MedicalForm = () => {
               fontWeight: 600,
             }}
           >
+            Policies
+          </FormLabel>
+          {PoliciesList ? (
+            <Autocomplete
+              disablePortal
+              id="combo-box-demo"
+              options={PoliciesList}
+              getOptionLabel={(option) => option.policyName}
+              value={policy}
+              onChange={(e, value) => setPolicy(value)}
+              renderInput={(params) => (
+                <CustomizedTextField
+                  placeholder="Select Type"
+                  {...params}
+                  inputProps={{
+                    ...params.inputProps,
+                  }}
+                />
+              )}
+            />
+          ) : (
+            <CircularProgress />
+          )}
+        </Stack>
+
+        <Stack spacing={1} width={"20%"} minWidth="250px" id="title">
+          <FormLabel
+            sx={{
+              color: "#0A0A0A",
+              fontSize: "16px",
+              fontWeight: 600,
+            }}
+          >
             insurance number
           </FormLabel>
           <CustomizedTextField
@@ -813,7 +925,12 @@ const MedicalForm = () => {
           }}
         />
       </Box>
-      <Button type="submit">submit</Button>
+      <Button type="submit" onClick={() => setSubmitType(1)}>
+        submit
+      </Button>
+      <Button type="submit" onClick={() => setSubmitType(2)}>
+        add new
+      </Button>
     </Stack>
   );
 };
